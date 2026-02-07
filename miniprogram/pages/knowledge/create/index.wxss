@@ -1,0 +1,126 @@
+/* pages/knowledge/create/index.wxss */
+@import "../../../app.wxss"; /* 导入全局颜色变量 */
+
+/* 表单整体容器 */
+.form-container {
+  padding: 30rpx 40rpx;
+  background-color: var(--color-bg-gray);
+  min-height: 100vh;
+}
+
+/* 单个表单项容器 */
+.form-item {
+  background-color: var(--color-white);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+/* 表单标签 */
+.form-label {
+  font-size: 32rpx;
+  color: var(--color-text-primary);
+  font-weight: bold;
+  display: block;
+  margin-bottom: 20rpx;
+}
+
+/* 普通输入框样式 */
+.form-input {
+  height: 80rpx;
+  line-height: 80rpx;
+  border: 1rpx solid var(--color-border);
+  border-radius: 10rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  color: var(--color-text-primary);
+  margin-bottom: 20rpx;
+}
+
+/* 释义区域的小输入框 */
+.small-input {
+  width: 48%;
+  display: inline-block;
+  margin-right: 2%;
+  margin-bottom: 20rpx;
+}
+
+/* 文本域样式 */
+.form-textarea {
+  border: 1rpx solid var(--color-border);
+  border-radius: 10rpx;
+  padding: 20rpx;
+  font-size: 28rpx;
+  color: var(--color-text-primary);
+  min-height: 160rpx;
+}
+
+/* 占位符样式 */
+.input-placeholder {
+  color: var(--color-text-placeholder);
+  font-size: 26rpx;
+}
+
+/* 新增释义按钮 */
+.add-btn {
+  width: 100%;
+  height: 70rpx;
+  line-height: 70rpx;
+  background-color: var(--color-primary-bg);
+  color: var(--color-primary);
+  border: 1rpx dashed var(--color-primary);
+  border-radius: 10rpx;
+  font-size: 28rpx;
+  margin-top: 10rpx;
+}
+
+/* 单选框组样式 */
+.radio-group {
+  display: flex;
+  flex-direction: row;
+  gap: 40rpx;
+  padding-left: 20rpx;
+}
+
+.radio-item {
+  font-size: 28rpx;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+/* 复选框组样式 */
+.checkbox-group {
+  display: flex;
+  flex-direction: row;
+  gap: 40rpx;
+  padding-left: 20rpx;
+}
+
+.checkbox-item {
+  font-size: 28rpx;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+/* 提交按钮容器 */
+.submit-btn-container {
+  padding: 0 40rpx;
+  margin-top: 50rpx;
+}
+
+/* 提交按钮样式 */
+.submit-btn {
+  width: 100%;
+  height: 80rpx;
+  line-height: 80rpx;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: 40rpx;
+  font-size: 30rpx;
+}

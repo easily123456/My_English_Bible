@@ -1,0 +1,41 @@
+/* pages/library/index.wxss */
+@import "../../app.wxss";
+
+.page-container {
+  padding: 40rpx 30rpx;
+  background-color: var(--color-bg-gray);
+  min-height: 100vh;
+}
+
+/* 页面标题样式 */
+.page-title {
+  font-size: 36rpx;
+  color: var(--color-text-primary);
+  font-weight: bold;
+  margin-bottom: 40rpx;
+  padding-left: 10rpx;
+}
+
+/* Grid布局容器：一行两列，自动换行 */
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 一行两列，宽度均等 */
+  gap: 30rpx; /* 卡片之间的间距（水平+垂直） */
+}
+
+/* 圆角卡片样式 */
+.knowledge-card {
+  background-color: var(--color-white);
+  border-radius: 20rpx; /* 圆角矩形 */
+  height: 200rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05); /* 轻微阴影，提升层次感 */
+}
+
+/* 卡片占位文字样式 */
+.card-placeholder {
+  font-size: 30rpx;
+  color: var(--color-text-secondary);
+}

@@ -1,0 +1,50 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/library/index",
+    "pages/me/index",
+    "pages/create/index",
+    "pages/detail/index",
+    "pages/knowledge/create/index"
+  ],
+  "tabBar": {
+    "color": "#666666",              
+    "selectedColor": "#1a7bff",        
+    "backgroundColor": "#ffffff",      
+    "borderStyle": "black",            
+    "list": [                          
+      {
+        "pagePath": "pages/index/index",       
+        "text": "首页",                        
+        "iconPath": "images/icons/home.png",  
+        "selectedIconPath": "images/icons/home_active.png"  
+      },
+      {
+        "pagePath": "pages/library/index",  
+        "text": "知识库",                     
+        "iconPath": "images/icons/book.png",   
+        "selectedIconPath": "images/icons/book_active.png"  
+      },
+      {
+        "pagePath": "pages/me/index",         
+        "text": "我的",                      
+        "iconPath": "images/icons/me.png",     
+        "selectedIconPath": "images/icons/me_active.png"  
+      },
+      {
+        "pagePath": "pages/knowledge/create/index",         
+        "text": "知识点创建",                      
+        "iconPath": "images/icons/me.png",     
+        "selectedIconPath": "images/icons/me_active.png"  
+      }
+      
+    ]
+  },
+  "window": {  
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "我的英语宝典",
+    "navigationBarTextStyle": "black"
+  },
+  "sitemapLocation": "sitemap.json"
+}

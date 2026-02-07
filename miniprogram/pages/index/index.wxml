@@ -1,0 +1,14 @@
+<!-- pages/index/index.wxml -->
+<view class="page-container">
+  <!-- 标题区域：预留仪表盘标题 -->
+  <view class="title-area">
+    <text class="main-title">我的英语学习仪表盘</text>
+    <text class="sub-title">实时跟踪你的学习进度</text>
+  </view>
+
+  <!-- 按钮容器：两个功能按钮（后续跳转创建页、继续学习） -->
+  <view class="btn-container">
+    <button class="func-btn primary-btn">创建新知识点</button>
+    <button class="func-btn secondary-btn">继续上次学习</button>
+  </view>
+</view>

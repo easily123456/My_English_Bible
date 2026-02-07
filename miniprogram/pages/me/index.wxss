@@ -1,0 +1,87 @@
+/* pages/me/index.wxss */
+@import "../../app.wxss";
+
+.page-container {
+  padding: 40rpx 30rpx;
+  background-color: var(--color-bg-gray);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 50rpx;
+}
+
+/* 统计区域样式 */
+.stats-area {
+  background-color: var(--color-white);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.stats-title {
+  font-size: 32rpx;
+  color: var(--color-text-primary);
+  font-weight: bold;
+  display: block;
+  margin-bottom: 30rpx;
+}
+
+/* 统计项容器 */
+.stats-item-container {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.stats-num {
+  font-size: 36rpx;
+  color: var(--color-primary);
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.stats-desc {
+  font-size: 26rpx;
+  color: var(--color-text-secondary);
+}
+
+/* 设置区域样式 */
+.setting-area {
+  background-color: var(--color-white);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.setting-title {
+  font-size: 32rpx;
+  color: var(--color-text-primary);
+  font-weight: bold;
+  display: block;
+  margin-bottom: 30rpx;
+}
+
+/* 设置项样式 */
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80rpx;
+  border-bottom: 1rpx solid var(--color-border);
+  padding: 0 10rpx;
+}
+
+.setting-item:last-child {
+  border-bottom: none; /* 最后一个设置项去掉下边框 */
+}
+
+.setting-item-text {
+  font-size: 30rpx;
+  color: var(--color-text-primary);
+}
+
+.arrow {
+  font-size: 28rpx;
+  color: var(--color-text-placeholder);
+}

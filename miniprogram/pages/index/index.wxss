@@ -1,0 +1,59 @@
+/* pages/index/index.wxss */
+/* 导入全局样式（若app.wxss已配置色板） */
+@import "../../app.wxss";
+
+.page-container {
+  padding: 40rpx 30rpx;
+  background-color: var(--color-bg-gray); /* 全局浅灰背景 */
+  min-height: 100vh;
+}
+
+/* 标题区域样式 */
+.title-area {
+  text-align: center;
+  margin-bottom: 80rpx;
+}
+
+.main-title {
+  font-size: 36rpx;
+  color: var(--color-text-primary);
+  font-weight: bold;
+  display: block;
+  margin-bottom: 20rpx;
+}
+
+.sub-title {
+  font-size: 28rpx;
+  color: var(--color-text-secondary);
+  display: block;
+}
+
+/* 按钮容器样式 */
+.btn-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx; /* 按钮之间的间距 */
+  align-items: center;
+}
+
+.func-btn {
+  width: 80%;
+  height: 80rpx;
+  line-height: 80rpx;
+  border-radius: 40rpx; /* 圆角按钮 */
+  font-size: 30rpx;
+}
+
+/* 主按钮（科技蓝） */
+.primary-btn {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+}
+
+/* 次要按钮（线框蓝） */
+.secondary-btn {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2rpx solid var(--color-primary);
+}

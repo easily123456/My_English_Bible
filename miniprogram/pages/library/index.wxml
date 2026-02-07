@@ -1,0 +1,30 @@
+<!-- pages/library/index.wxml -->
+<view class="page-container">
+  <!-- 页面标题 -->
+  <view class="page-title">
+    <text>我的知识库</text>
+  </view>
+
+  <!-- Grid布局容器：一行两列，预留卡片位置 -->
+  <view class="card-grid">
+    <!-- 卡片占位1（后续填充知识点集合） -->
+    <view class="knowledge-card">
+      <text class="card-placeholder">单词集合</text>
+    </view>
+
+    <!-- 卡片占位2 -->
+    <view class="knowledge-card">
+      <text class="card-placeholder">词组大全</text>
+    </view>
+
+    <!-- 卡片占位3 -->
+    <view class="knowledge-card">
+      <text class="card-placeholder">功能句型</text>
+    </view>
+
+    <!-- 卡片占位4 -->
+    <view class="knowledge-card">
+      <text class="card-placeholder">作文模板</text>
+    </view>
+  </view>
+</view>
