@@ -1,4 +1,4 @@
-// pages/knowledge/list/index.js
+// pages/knowledge/detail/index.js
 Page({
 
   /**

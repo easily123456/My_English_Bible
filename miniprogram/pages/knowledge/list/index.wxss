@@ -1,0 +1,62 @@
+/* pages/knowledge/list/index.wxss */
+@import "../../../app.wxss";
+
+
+/* 页面容器 */
+.library-container {
+  padding: 20rpx;
+  background-color: var(--color-bg-gray);
+  min-height: 100vh;
+}
+
+/* 知识点列表 */
+.knowledge-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+/* 单个知识点项 */
+.knowledge-item {
+  background-color: var(--color-white);
+  border-radius: 16rpx;
+  padding: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+}
+
+/* 点击时轻微缩放，提升交互感 */
+.knowledge-item:active {
+  transform: scale(0.98);
+}
+
+/* 知识点内容 */
+.content {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: var(--color-text-primary);
+  margin-bottom: 10rpx;
+}
+
+/* 简化释义 */
+.brief-definition {
+  font-size: 28rpx;
+  color: var(--color-text-secondary);
+  margin-bottom: 10rpx;
+}
+
+/* 创建时间 */
+.create-time {
+  font-size: 24rpx;
+  color: var(--color-text-placeholder);
+}
+
+/* 空数据提示 */
+.empty-tip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400rpx;
+  font-size: 28rpx;
+  color: var(--color-text-placeholder);
+}

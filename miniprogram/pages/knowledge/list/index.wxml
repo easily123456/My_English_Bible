@@ -1,0 +1,34 @@
+<view class="library-container">
+  <!-- 知识点列表 -->
+  <view class="knowledge-list">
+    <!-- 循环渲染每个知识点项 -->
+    <view 
+      class="knowledge-item" 
+      wx:for="{{knowledgeList}}" 
+      wx:key="_id" 
+      bindtap="goToDetail" 
+      data-id="{{item._id}}" 
+    >
+    <!-- 用知识点唯一ID做key，比index更稳定 -->
+    <!-- 绑定点击跳转事件 -->
+    <!-- item._id意为当前循环到的变量的ID。存储知识点ID，供goToDetail函数获取 -->
+      <!-- 知识点核心内容 -->
+      <view class="content">{{item.content}}</view>
+      <!-- 简化版释义（取第一个释义，避免列表过长） -->
+      <view class="brief-definition">
+        <text wx:if="{{item.definitions[0]}}"> <!-- 判断是否存在 -->
+          {{item.definitions[0].partOfSpeech}} {{item.definitions[0].meaning}}
+          <!-- 提取词性和释义显示在text中  -->
+        </text>
+        <text wx:else>无释义</text>
+      </view>
+      <!-- 创建时间（格式化，可选） -->
+      <view class="create-time">{{item.createTime}}</view>
+    </view>
+  </view>
+
+  <!-- 空数据提示 -->
+  <view class="empty-tip" wx:if="{{knowledgeList.length === 0}}">
+    <text>暂无知识点，快去创建吧~</text>
+  </view>
+</view>

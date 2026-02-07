@@ -5,7 +5,9 @@
     "pages/me/index",
     "pages/create/index",
     "pages/detail/index",
-    "pages/knowledge/create/index"
+    "pages/knowledge/create/index",
+    "pages/knowledge/list/index",
+    "pages/knowledge/detail/index"
   ],
   "tabBar": {
     "color": "#666666",              
@@ -34,6 +36,12 @@
       {
         "pagePath": "pages/knowledge/create/index",         
         "text": "知识点创建",                      
+        "iconPath": "images/icons/me.png",     
+        "selectedIconPath": "images/icons/me_active.png"  
+      },
+      {
+        "pagePath": "pages/knowledge/list/index",         
+        "text": "知识点列表",                      
         "iconPath": "images/icons/me.png",     
         "selectedIconPath": "images/icons/me_active.png"  
       }
