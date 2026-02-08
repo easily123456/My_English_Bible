@@ -1,174 +1,209 @@
-// pages/knowledge/create/index.js
-// 1. 初始化云数据库（全局只需要初始化一次，若app.js已初始化，可省略这行）
-
-// 2. 获取数据库引用
-const db = wx.cloud.database();
-
+// pages/knowledge/create.js
+const db = wx.cloud.database()
 Page({
-  /**
-   * 页面的初始数据
-   * 初始化与表单对应的所有变量
-   */
   data: {
-    // 动态释义列表：初始显示1行空对象（对应页面1行输入框）
-    definitionsList: [{}],
-    // 可选：若需要暂存表单数据，可在这里初始化，也可提交时直接从e.detail.value获取
-    content: "",
-    sentence: "",
-    reviewType: "en_to_zh" // 默认复习类型：英->中
+    // 基础输入
+    enContent: '',
+    exampleContent: '',
+    // 词性-释义数组（核心：绑定关系）
+    posZhList: [{ pos: '', zh: '' }], // 初始1行
+    //pos为词性，zh为中文释义
+    // 知识库相关
+    libraryList: [],
+    checkedLibraryIds: [] //存储用户勾选的知识库 ID 数组
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-    // 页面加载时的初始化逻辑（暂无需要，可留空）
+  onLoad(options) {//首次加载页面调用
+    this.getLibraryList()
   },
 
-  // 3. 动态添加释义行的函数（绑定到“+ 新增一行释义”按钮的bindtap）
-  addDefinition() {
-    try {
-      const newDefinitionsList = [...this.data.definitionsList];
-      //核心逻辑为根据原数组创建一个新数组
-      // "... 是展开运算符（Spread Operator），它将 this.data.definitionsList 数组的元素展开，然后通过 [] 数组字面量语法将这些展开的元素重新组合成一个新数组，最后将新数组赋值给变量 newDefinitionsList。"
-      //const newDefinitionsList = this.data.definitionsList; 这意为同一个数组的两个变量名
-      //小程序通过 setData() 触发视图更新，而直接修改 this.data 或push() 可能无法被框架正确检测到变化
-
-      // ② 新增一个空对象（代表新增一行输入框），为了触发页面渲染
-      newDefinitionsList.push({});
-      // ③ 更新data中的数组，页面会自动渲染新行
-      this.setData({ //内置setData
-        definitionsList: newDefinitionsList
-      });
-      // ④ 友好提示
-      wx.showToast({
-        title: '新增释义行成功',
-        icon: 'success',//内置图标
-        duration: 1000 //显示1秒
-      });
-    } catch (error) {
-      // 异常处理：新增失败时提示
-      wx.showToast({
-        title: '新增失败，请重试',
-        icon: 'none',
-        duration: 1500
-      });
-      console.error('新增释义行失败：', error);
-    }
-  },
-
-  // 4. 表单提交函数（绑定到<form>的bindsubmit）
-  onSubmit(e) {//e是整个提交的事件对象
-    try {
-      const formData = e.detail.value;
-      console.log('表单原始数据：', formData);
-      /*
-      表单绑定：<form bindsubmit="onSubmit"> 将表单的提交事件绑定到 onSubmit 函数。
-      触发提交：当用户点击表单内 form-type="submit" 的按钮时，小程序会自动收集表单数据。
-      数据打包：表单中所有 带 name 属性的输入控件（如 <input>、<picker> 等）的值会被自动组装成 {name1: value1, name2: value2} 的对象。
-      数据获取：在 onSubmit(e) 中，通过 e.detail.value 提取用户输入的值。
-      */
-      //输出结果例如 { username: "Alice", password: "123456" }
-
-      // ② 数据校验：核心字段不能为空
-      if (!formData.content) {
+  // 获取知识库列表（不变）
+  getLibraryList() {
+    wx.showLoading({ title: '加载知识库...' })
+    db.collection('libraries')
+      .get()
+      .then(res => {
+        wx.hideLoading()
+        this.setData({
+          libraryList: res.data
+        })
+      })
+      .catch(err => {
+        wx.hideLoading()
         wx.showToast({
-          title: '知识点内容不能为空',
-          icon: 'none',
-          duration: 1500
-        });
-        return; // 校验失败，终止提交
-      }
-
-      // ③ 组装definitions数组（把零散的partOfSpeech_0、meaning_0等拼成数据库需要的格式）
-      const definitions = [];
-      const listLength = this.data.definitionsList.length; // 获取当前释义行数量
-      for (let i = 0; i < listLength; i++) {
-        // 取第i行的词性和释义值
-        const partOfSpeech = formData[`partOfSpeech_${i}`] || "";
-        const meaning = formData[`meaning_${i}`] || "";
-        // 占位符用 ${i} 表示，反引号 ` 包裹的内容会被解析为 可包含占位符的字符串，
-        if (partOfSpeech && meaning) {
-          definitions.push({
-            partOfSpeech: partOfSpeech.trim(), // 去除前后空格
-            meaning: meaning.trim()
-          });
-        }
-      }
-      // 校验释义数组：至少有一行有效数据
-      if (definitions.length === 0) {
-        wx.showToast({
-          title: '至少填写一行释义与词性',
-          icon: 'none',
-          duration: 1500
-        });
-        return;
-      }
-
-      // ④ 组装最终要存入数据库的数据
-      const knowledgeData = {
-        content: formData.content.trim(), // 知识点内容（去空格）
-        definitions: definitions, // 释义数组
-        sentence: formData.sentence ? formData.sentence.trim() : "", // 例句（可选）
-        reviewType: formData.reviewType || "en_to_zh", // 复习类型（默认英->中）
-        createTime: db.serverDate() // 服务器时间（避免本地时间错乱）
-      };
-      console.log('要存入数据库的数据：', knowledgeData);
-
-      // ⑤ 调用云数据库add方法，插入数据
-      db.collection('knowledge_items').add({//数据库向集合knowledge_items添加值
-      //核心逻辑向数据库的 knowledge_items 集合提交数据（knowledgeData），并根据提交结果（成功/失败）执行不同的回调逻辑（显示提示并跳转或报错）
-        data: knowledgeData,
-        success: (res) => {
-          // 提交成功：提示+返回上一页
-          wx.showToast({
-            title: '知识点创建成功',
-            icon: 'success',
-            duration: 1500
-          });
-          // 1.5秒后返回上一页（让用户看到提示）
-          setTimeout(() => {
-            wx.navigateBack({
-              delta: 1 // 返回上一级页面
-            });
-          }, 1500);
-        },
-        fail: (err) => {
-          // 提交失败：提示错误
-          wx.showToast({
-            title: '创建失败，请重试',
-            icon: 'none',
-            duration: 2000
-          });
-          console.error('数据库插入失败：', err);
-        }
-      });
-
-    } catch (error) {
-      // 全局异常捕获
-      wx.showToast({
-        title: '提交异常，请重试',
-        icon: 'none',
-        duration: 2000
-      });
-      console.error('表单提交异常：', error);
-    }
+          title: '加载知识库失败',
+          icon: 'none'
+        })
+        console.error('获取知识库列表失败：', err)
+      })
+      // console.log("libraryList:", this.data.libraryList);
+      // console.log("正在查询知识库列表")
   },
 
-  /**
-   * 可选：表单重置函数（若需要“清空表单”按钮，可绑定bindreset="onReset"）
-   */
-  onReset() {
+  // 英文输入绑定
+  onEnInput(e) {
     this.setData({
-      definitionsList: [{}], // 重置为1行释义
-      content: "",
-      sentence: "",
-      reviewType: "en_to_zh"
-    });
-    wx.showToast({
-      title: '表单已清空',
-      icon: 'none',
-      duration: 1000
-    });
+      enContent: e.detail.value.trim()
+    })
+  },
+
+  // 新增：词性输入绑定（指定index）
+  onPosInput(e) {
+    const index = e.currentTarget.dataset.index 
+    //e.currentTarget表示触发事件的当前组件，dataset自定义数据集合，通过 data- 前缀的属性绑定
+    const value = e.detail.value.trim()
+    const posZhList = [...this.data.posZhList]
+    posZhList[index].pos = value
+    this.setData({ posZhList })
+  },
+
+  // 新增：释义输入绑定（指定index）
+  onZhItemInput(e) {
+    const index = e.currentTarget.dataset.index
+    const value = e.detail.value.trim()
+    const posZhList = [...this.data.posZhList]
+    posZhList[index].zh = value
+    this.setData({ posZhList })
+  },
+
+  // 新增：添加一行词性-释义
+  onAddPosZh() {
+    const posZhList = [...this.data.posZhList]
+    posZhList.push({ pos: '', zh: '' })
+    this.setData({ posZhList })
+  },
+
+  // 新增：删除指定行词性-释义
+  onDelPosZh(e) {
+    const index = e.currentTarget.dataset.index
+    const posZhList = [...this.data.posZhList]
+    // 至少保留1行
+    if (posZhList.length <= 1) {
+      wx.showToast({
+        title: '至少保留1个词性-释义',
+        icon: 'none'
+      })
+      return
+    }
+    posZhList.splice(index, 1)
+    //splice(arg1,arg2) arg1为删除的起始位置，arg2为删除的数量
+    this.setData({ posZhList })
+  },
+
+  // 新增：例句输入绑定
+  onExampleInput(e) {
+    this.setData({
+      exampleContent: e.detail.value
+    })
+  },
+
+  // 知识库多选框处理（不变）
+  // onLibraryCheck(e) {
+  //   console.log("使用onLibraryCheck函数")
+  //   const libraryId = e.currentTarget.dataset.libraryId
+  //   const checked = e.detail.value.length > 0
+  //   let checkedLibraryIds = [...this.data.checkedLibraryIds]
+  //   //let意为后续可能重新赋值
+
+  //   if (checked) {
+  //     if (!checkedLibraryIds.includes(libraryId)) {   //如果原本就包含了被勾选的选择项，那么本次就不再添加
+  //       checkedLibraryIds.push(libraryId)
+  //     }
+  //   } else {
+  //     checkedLibraryIds = checkedLibraryIds.filter(id => id !== libraryId)
+  //     //filter遍历原数组，判断传入id与遍历到的libraryId是否一致，不一致则保留，否则删去。filter返回的是一个新数组
+  //   }
+
+  //   this.setData({ checkedLibraryIds })
+    
+  // },
+
+    handleLibraryCheck(e) {
+      // 直接把选中的ID数组存到data里，提交时直接用
+      this.setData({
+        checkedLibraryIds: e.detail.value
+      })
+    },
+
+  // 提交逻辑（更新：包含词性-释义、例句）
+  onSubmit() {
+    const { enContent, posZhList, exampleContent, checkedLibraryIds } = this.data
+    
+    // 步骤1：校验（直接用存储的选中值）
+    const hasValidPosZh = posZhList.some(item => item.pos && item.zh)
+    // console.log(enContent)
+    // console.log(hasValidPosZh)
+    // console.log(checkedLibraryIds.length)
+    if (!enContent || !hasValidPosZh || checkedLibraryIds.length === 0) {
+      wx.showToast({
+        title: '请填写英文、完整的词性-释义并选择知识库',
+        icon: 'none'
+      })
+      return
+    }
+
+    // 步骤2：提交知识点
+    wx.showLoading({ title: '提交中...' })
+    db.collection('knowledge_items')
+      .add({
+        data: {
+          en: enContent,
+          posZh: posZhList,
+          example: exampleContent,
+          createTime: db.serverDate()
+        }
+      })
+      .then(res => {
+        const itemId = res._id //插入知识点返回的id
+        // 步骤3：创建关联记录
+        return this.createRelationRecords(itemId, checkedLibraryIds)
+      })
+      .then(() => {
+        wx.hideLoading()
+        wx.showToast({ title: '提交成功', icon: 'success' })
+        // 清空表单（包括选中状态）
+        this.setData({
+          enContent: '',
+          posZhList: [{ pos: '', zh: '' }],
+          exampleContent: '',
+          checkedLibraryIds: [] // 清空选中值，复选框会自动取消选中
+        })
+      })
+      .catch(err => {
+        wx.hideLoading()
+        wx.showToast({ title: '提交失败', icon: 'none' })
+        console.error('提交知识点失败：', err)
+      })
+  },
+
+
+  // 创建关联记录（逻辑不变）
+  createRelationRecords(itemId, libraryIds) {
+    //核心逻辑："先构建一个 List，里面的内容虽然是向集合 item_set_relations 添加记录，但并没有执行，而是由 Promise.all() 调用 all 方法执行。"
+    const promiseList = libraryIds.map(libraryId => {
+      return db.collection('item_set_relations').add({
+        data: {
+          itemId: itemId,
+          setId: libraryId,
+          setType: 'library',
+          reviewCount: 0,
+          mastery: 0,
+          lastReviewTime: null
+        }
+      })
+    })
+    return Promise.all(promiseList) //Promise是处理异步操作的核心对象
+      .then(resList => {  //处理成功结果
+        console.log('关联记录创建成功：', resList)
+        return resList
+      })
+      .catch(err => {
+        console.error('创建关联记录失败：', err)
+        throw err
+      })
+      //all()是一个静态方法，用于并行处理多个 Promise
+      /*
+      db.collection('item_set_relations').add()  Promise 对象，并（通常）同时启动异步数据库插入操作。Promise.all() 的作用是并行等待这些已启动的操作全部完成，并统一处理结果或错误。
+      */
   }
-});
+})

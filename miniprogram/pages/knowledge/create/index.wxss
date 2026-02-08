@@ -1,126 +1,153 @@
-/* pages/knowledge/create/index.wxss */
-@import "../../../app.wxss"; /* 导入全局颜色变量 */
+/* pages/knowledge/create.wxss */
+@import "../../../app.wxss";
 
-/* 表单整体容器 */
-.form-container {
-  padding: 30rpx 40rpx;
+.container {
+  padding: 30rpx 20rpx;
   background-color: var(--color-bg-gray);
   min-height: 100vh;
 }
 
-/* 单个表单项容器 */
-.form-item {
-  background-color: var(--color-white);
-  border-radius: 20rpx;
-  padding: 30rpx;
-  margin-bottom: 30rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
-}
-
-/* 表单标签 */
-.form-label {
-  font-size: 32rpx;
-  color: var(--color-text-primary);
+.page-title {
+  font-size: 36rpx;
   font-weight: bold;
-  display: block;
-  margin-bottom: 20rpx;
-}
-
-/* 普通输入框样式 */
-.form-input {
-  height: 80rpx;
-  line-height: 80rpx;
-  border: 1rpx solid var(--color-border);
-  border-radius: 10rpx;
-  padding: 0 20rpx;
-  font-size: 28rpx;
   color: var(--color-text-primary);
-  margin-bottom: 20rpx;
+  margin-bottom: 40rpx;
+  text-align: center;
 }
 
-/* 释义区域的小输入框 */
-.small-input {
-  width: 48%;
-  display: inline-block;
-  margin-right: 2%;
-  margin-bottom: 20rpx;
-}
-
-/* 文本域样式 */
-.form-textarea {
-  border: 1rpx solid var(--color-border);
-  border-radius: 10rpx;
+.form-item {
+  margin-bottom: 30rpx;
+  background-color: var(--color-white);
   padding: 20rpx;
+  border-radius: 10rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
+  /* 统一所有表单项的宽度，确保输入框外层容器一致 */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-label {
+  font-size: 30rpx;
+  color: var(--color-text-primary);
+  margin-bottom: 10rpx;
+  display: block;
+}
+
+/* 核心：统一所有输入框的基础样式 + 宽度100% */
+.form-input {
   font-size: 28rpx;
   color: var(--color-text-primary);
-  min-height: 160rpx;
+  padding: 10rpx;
+  border-bottom: 1rpx solid var(--color-border);
+  /* 关键：所有输入框宽度100% */
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
 }
 
-/* 占位符样式 */
-.input-placeholder {
-  color: var(--color-text-placeholder);
-  font-size: 26rpx;
+/* 词性-释义模块：调整布局，确保输入框宽度统一 */
+.pos-zh-list {
+  margin-bottom: 10rpx;
 }
 
-/* 新增释义按钮 */
+/* 改为纵向布局，让词性/释义输入框都占满整行 */
+.pos-zh-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+  margin-bottom: 15rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 词性/释义输入框继承.form-input的100%宽度，无额外flex */
+.pos-input, .zh-input {
+  width: 100%;
+  box-sizing: border-box;
+  /* 移除原有的flex和margin-right，避免宽度不一致 */
+  flex: none;
+  margin-right: 0;
+}
+
+
+/* 删除按钮样式调整，不影响输入框宽度 */
+.del-btn {
+  align-self: flex-end; /* 按钮靠右 */
+  width: 80rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  padding: 0;
+  background-color: var(--color-error);
+  color: var(--color-white);
+  font-size: 24rpx;
+  border-radius: 8rpx;
+  margin-top: 5rpx;
+}
+
 .add-btn {
   width: 100%;
   height: 70rpx;
   line-height: 70rpx;
+  padding: 0;
   background-color: var(--color-primary-bg);
   color: var(--color-primary);
-  border: 1rpx dashed var(--color-primary);
-  border-radius: 10rpx;
+  font-size: 26rpx;
+  border-radius: 8rpx;
+  margin-top: 10rpx;
+  box-sizing: border-box;
+}
+
+/* 例句输入框：统一宽度 */
+.form-textarea {
   font-size: 28rpx;
+  color: var(--color-text-primary);
+  padding: 10rpx;
+  border: 1rpx solid var(--color-border);
+  border-radius: 8rpx;
+  min-height: 120rpx;
+  resize: none;
+  /* 关键：和其他输入框统一宽度 */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 知识库多选框样式 */
+.library-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
   margin-top: 10rpx;
 }
 
-/* 单选框组样式 */
-.radio-group {
-  display: flex;
-  flex-direction: row;
-  gap: 40rpx;
-  padding-left: 20rpx;
-}
-
-.radio-item {
-  font-size: 28rpx;
-  color: var(--color-text-secondary);
-  display: flex;
-  align-items: center;
-  gap: 10rpx;
-}
-
-/* 复选框组样式 */
-.checkbox-group {
-  display: flex;
-  flex-direction: row;
-  gap: 40rpx;
-  padding-left: 20rpx;
-}
-
 .checkbox-item {
-  font-size: 28rpx;
-  color: var(--color-text-secondary);
   display: flex;
   align-items: center;
-  gap: 10rpx;
+  padding: 10rpx 15rpx;
+  background-color: var(--color-primary-bg);
+  border-radius: 8rpx;
+  margin-bottom: 10rpx;
 }
 
-/* 提交按钮容器 */
-.submit-btn-container {
-  padding: 0 40rpx;
-  margin-top: 50rpx;
+.checkbox-text {
+  font-size: 26rpx;
+  color: var(--color-text-primary);
+  margin-left: 8rpx;
 }
 
-/* 提交按钮样式 */
 .submit-btn {
-  width: 100%;
-  height: 80rpx;
-  line-height: 80rpx;
+  margin-top: 40rpx;
   background-color: var(--color-primary);
   color: var(--color-white);
-  border: none;
-  border-radius: 40rpx;
-  font-size: 30rpx;
+  border-radius: 45rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+  font-size: 32rpx;
+  width: 100%;
+  box-sizing: border-box;
+
+}
+
+.submit-btn[disabled] {
+  background-color: var(--color-text-placeholder);
+  color: var(--color-white);
 }

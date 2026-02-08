@@ -1,88 +1,81 @@
-<!-- pages/knowledge/create/index.wxml -->
-<!-- 表单组件：绑定submit事件，提交时触发onSubmit函数 -->
-<form bindsubmit="onSubmit" bindreset="onReset">
-  <view class="form-container">
-    <!-- 1. 知识点内容（content）输入框 -->
-    <view class="form-item">
-      <text class="form-label">知识点内容</text>
-      <input 
-        class="form-input" 
-        name="content" 
-        placeholder="请输入单词/词组/句型（如：abandon）" 
-        placeholder-class="input-placeholder"
-      />
-    </view>
+<!-- pages/knowledge/create.wxml -->
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="page-title">创建新知识点</view>
 
-    <!-- 2. 动态释义与词性（definitions）区域 -->
-    <view class="form-item">
-      <text class="form-label">释义与词性</text>
-      <!-- 释义列表：用wx:for遍历动态数组，wx:key保证唯一性 -->
-      <view class="definitions-list">
-        <view class="definition-item" wx:for="{{definitionsList}}" wx:key="index">  
-          <!-- definitionsList为js文件中的值-->
-          <!-- 词性选择器（简化为输入框，后续可优化为picker） -->
-          <input 
-            class="form-input small-input" 
-            name="partOfSpeech_{{index}}" 
-            placeholder="词性（如：v. / n.）" 
-            placeholder-class="input-placeholder"
-          />
-          <!-- 释义输入框 -->
-          <input 
-            class="form-input small-input" 
-            name="meaning_{{index}}" 
-            placeholder="对应释义（如：抛弃；放弃）" 
-            placeholder-class="input-placeholder"
-          />
-        </view>
-      </view>
-      <!-- 新增释义按钮：点击触发addDefinition函数 -->
-      <button class="add-btn" bindtap="addDefinition">+ 新增一行释义</button>
-    </view>
-
-    <!-- 3. 例句（sentence）文本域 -->
-    <view class="form-item">
-      <text class="form-label">例句</text>
-      <textarea 
-        class="form-textarea" 
-        name="sentence" 
-        placeholder="请输入英文例句（可附带中文翻译，用||分隔）" 
-        placeholder-class="input-placeholder"
-        auto-height
-      />
-    </view>
-
-    <!-- 4. 复习类型（reviewType）单选框组 -->
-    <view class="form-item">
-      <text class="form-label">复习类型</text>
-      <view class="radio-group">
-        <radio-group name="reviewType">
-          <label class="radio-item">
-            <radio value="en_to_zh" checked /> 英->中
-          </label>
-          <label class="radio-item">
-            <radio value="zh_to_en" /> 中->英
-          </label>
-        </radio-group>
-      </view>
-    </view>
-
-    <!-- 5. 归属设置（静态复选框模拟） -->
-    <view class="form-item">
-      <text class="form-label">归属设置</text>
-      <view class="checkbox-group">
-        <label class="checkbox-item">
-          <checkbox /> 我的词汇库
-        </label>
-        <label class="checkbox-item">
-          <checkbox /> 我的句型库
-        </label>
-      </view>
-    </view>
-
-    <!-- 6. 提交按钮 -->
-    <view class="submit-btn-container">
-      <button class="submit-btn" form-type="submit">提交知识点</button>
-    </view>
+  <!-- 英文输入 -->
+  <view class="form-item">
+    <label class="form-label">英文</label>
+    <input 
+      class="form-input" 
+      placeholder="请输入英文（如 apple）" 
+      bindinput="onEnInput"
+      value="{{enContent}}"
+    />
+    <!--将enContent的值绑定到输入框的 value 属性上-->
   </view>
-</form>
+
+  <!-- 新增：词性+释义（绑定关系） -->
+  <view class="form-item">
+    <label class="form-label">词性 & 释义（可添加多行）</label>
+    <!-- 已添加的词性-释义列表 -->
+    <view class="pos-zh-list" wx:for="{{posZhList}}" wx:key="index">
+      <view class="pos-zh-item">
+        <input 
+          class="form-input pos-input" 
+          placeholder="词性（如 n.）" 
+          bindinput="onPosInput"
+          data-index="{{index}}"
+          value="{{item.pos}}"
+        />
+        <!-- data-index="{{index}}" 是一个 自定义数据属性（data-*），它的作用是 在元素上存储额外的数据 -->
+        <input 
+          class="form-input zh-input" 
+          placeholder="对应释义" 
+          bindinput="onZhItemInput"
+          data-index="{{index}}"
+          value="{{item.zh}}"
+        />
+        <button 
+          class="del-btn" 
+          bindtap="onDelPosZh"
+          data-index="{{index}}"
+        >删除</button>
+      </view>
+    </view>
+    <!-- 添加按钮 -->
+    <button class="add-btn" bindtap="onAddPosZh">+ 添加词性-释义</button>
+  </view>
+
+  <!-- 新增：例句 -->
+  <view class="form-item">
+    <label class="form-label">例句（可选）</label>
+    <textarea 
+      class="form-textarea" 
+      placeholder="请输入例句（如 I have an apple.）" 
+      bindinput="onExampleInput"
+      value="{{exampleContent}}"
+    />
+  </view>
+
+  <!-- 知识库归属（仅加 bindchange 事件，无其他修改） -->
+  <view class="form-item">
+    <label class="form-label">归属知识库（可多选）</label>
+    <checkbox-group 
+      class="library-checkbox-group" 
+      bindchange="handleLibraryCheck" 
+    >
+      <label class="checkbox-item" wx:for="{{libraryList}}" wx:key="_id">
+        <checkbox value="{{item._id}}" />
+        <text class="checkbox-text">{{item.name}}</text>
+      </label>
+    </checkbox-group>
+  </view>
+
+  <!-- 提交按钮（校验规则更新：需至少1个词性-释义对） -->
+  <button 
+    class="submit-btn" 
+    bindtap="onSubmit"
+  >提交知识点</button>
+  <!-- disabled="{{!enContent || posZhList.length === 0 || checkedLibraryIds.length === 0}}" -->
+</view>
