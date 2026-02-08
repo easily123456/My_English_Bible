@@ -1,30 +1,21 @@
 <!-- pages/library/index.wxml -->
-<view class="page-container">
+<view class="library-container">
   <!-- 页面标题 -->
-  <view class="page-title">
-    <text>我的知识库</text>
-  </view>
-
-  <!-- Grid布局容器：一行两列，预留卡片位置 -->
-  <view class="card-grid">
-    <!-- 卡片占位1（后续填充知识点集合） -->
-    <view class="knowledge-card">
-      <text class="card-placeholder">单词集合</text>
-    </view>
-
-    <!-- 卡片占位2 -->
-    <view class="knowledge-card">
-      <text class="card-placeholder">词组大全</text>
-    </view>
-
-    <!-- 卡片占位3 -->
-    <view class="knowledge-card">
-      <text class="card-placeholder">功能句型</text>
-    </view>
-
-    <!-- 卡片占位4 -->
-    <view class="knowledge-card">
-      <text class="card-placeholder">作文模板</text>
+  <view class="page-title">我的知识库</view>
+  
+  <!-- 知识库卡片列表（核心：flex-wrap: wrap实现一行两列） -->
+  <view class="library-card-list">
+    <view 
+      class="library-card" 
+      wx:for="{{libraryList}}" 
+      wx:key="index"
+      bindtap="goToLibraryDetail" 
+      data-library="{{item}}"
+    ><!-- 预留点击事件，后续可跳转知识库详情 -->
+      <!-- 卡片内容 -->
+      <text class="card-name">{{item.name}}</text>
+      <!-- 卡片装饰（可选） -->
+      <view class="card-icon">📚</view>
     </view>
   </view>
 </view>

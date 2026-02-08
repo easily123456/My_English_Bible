@@ -1,66 +1,58 @@
-// pages/knowledge/list/index.js
+// pages/library/index.js
+
+const db = wx.cloud.database();
+
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    knowledgeList: [], // 原有知识点列表（若需要保留）
+    // 新增：7个静态知识库名称
+    libraryList: [
+      { name: "单词集合（英译中）" },
+      { name: "单词集合（中译英）" },
+      { name: "词组大全" },
+      { name: "功能句型" },
+      { name: "作文高级词汇" },
+      { name: "易混淆词汇" },
+      { name: "作文模板" }
+    ]
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
+  // 原有onLoad逻辑（查询知识点列表，可保留）
   onLoad(options) {
-
+    // 若不需要显示知识点列表，可注释此段，仅展示静态知识库卡片
+    wx.showLoading({ title: '加载中...', mask: true });
+    db.collection('knowledge_items')
+      .orderBy('createTime', 'desc')
+      .get({
+        success: (res) => {
+          this.setData({ knowledgeList: res.data });
+          wx.hideLoading();
+        },
+        fail: (err) => {
+          wx.hideLoading();
+          console.error('查询失败：', err);
+        }
+      });
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  // 预留：点击知识库卡片跳转详情（后续可完善）
+  goToLibraryDetail(e) {
+    const library = e.currentTarget.dataset.library;
+    wx.showToast({
+      title: `进入${library.name}`,
+      icon: 'none'
+    });
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
+  // 原有goToDetail、onPullDownRefresh等逻辑（保留）
+  goToDetail(e) {
+    const knowledgeId = e.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: `/pages/knowledge/detail/index?id=${knowledgeId}`
+    });
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
   onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
+    this.onLoad();
+    wx.stopPullDownRefresh();
   }
-})
+});

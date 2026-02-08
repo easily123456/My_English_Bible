@@ -3,8 +3,6 @@
     "pages/index/index",
     "pages/library/index",
     "pages/me/index",
-    "pages/create/index",
-    "pages/detail/index",
     "pages/knowledge/create/index",
     "pages/knowledge/list/index",
     "pages/knowledge/detail/index"

@@ -1,26 +1,27 @@
 /**app.wxss**/
 /* 我的英语宝典 - 科技蓝主题色系统 */
-:root {
+page {
   /* 主色系 - 科技蓝 */
-  --color-primary: #1a7bff; /* 核心主色，用于主要按钮、选中态 */
-  --color-primary-dark: #0052cc; /* 深蓝，用于按钮按下状态 */
-  --color-primary-light: #4d9eff; /* 浅蓝，用于悬浮、次要背景 */
-  --color-primary-bg: #f0f7ff; /* 极浅蓝，用于卡片背景、分隔区 */
+  --color-primary:#1a7bff; /* 核心主色，用于主要按钮、选中态 */
+  --color-primary-dark:#0052cc; /* 深蓝，用于按钮按下状态 */
+  --color-primary-light:#4d9eff; /* 浅蓝，用于悬浮、次要背景 */
+  --color-primary-bg:#f0f7ff; /* 极浅蓝，用于卡片背景、分隔区 */
 
   /* 中性色系 - 用于文字、背景、边框 */
-  --color-text-primary: #333333; /* 主要文字，如标题 */
-  --color-text-secondary: #666666; /* 次要文字，如说明 */
-  --color-text-placeholder: #999999; /* 占位文字 */
-  --color-border: #e6e6e6; /* 边框、分隔线 */
-  --color-bg-gray: #f8f8f8; /* 页面背景 */
-  --color-white: #ffffff; /* 卡片背景、按钮文字 */
+  --color-text-primary:#333333; /* 主要文字，如标题 */
+  --color-text-secondary:#666666; /* 次要文字，如说明 */
+  --color-text-placeholder:#999999; /* 占位文字 */
+  --color-border:#e6e6e6; /* 边框、分隔线 */
+  --color-bg-gray:#f8f8f8; /* 页面背景 */
+  --color-white:#ffffff; /* 卡片背景、按钮文字 */
 
   /* 功能色系 - 用于反馈与状态 */
-  --color-success: #52c41a; /* 成功、正确 */
-  --color-warning: #faad14; /* 警告、注意 */
-  --color-error: #ff4d4f; /* 错误、失败、红色标记 */
-  --color-error-bg: #fff2f0; /* 错误背景（如标红单词的淡红底） */
+  --color-success:#52c41a; /* 成功、正确 */
+  --color-warning:#faad14; /* 警告、注意 */
+  --color-error:#ff4d4f; /* 错误、失败、红色标记 */
+  --color-error-bg:#fff2f0; /* 错误背景（如标红单词的淡红底） */
 }
+
 .container {
   display: flex;
   flex-direction: column;
@@ -28,21 +29,23 @@
   box-sizing: border-box;
 } 
 
+/* 修复：只保留有用的按钮重置，删除 background: initial */
 button {
-  background: initial;
+  /* 删掉 background: initial; 这行！ */
+  border: none; /* 可选：直接去掉默认边框，替代 ::after 的重置 */
 }
 
 button:focus{
-  outline: 0;
+  outline: 0; /* 保留：去掉焦点轮廓，不影响颜色 */
 }
 
 button::after{
-  border: none;
+  border: none; /* 保留：去掉按钮默认的伪元素边框 */
 }
 
-
+/* 修复：page 背景色使用全局变量，保持统一 */
 page {
-  background: #f6f6f6;
+  background: var(--color-bg-gray); /* 替换成变量，和定义一致 */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

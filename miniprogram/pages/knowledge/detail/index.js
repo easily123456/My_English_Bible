@@ -68,26 +68,12 @@ Page({
   /**
    * 预留：朗读内容按钮事件（第13步集成TTS时补充）
    */
-  // 用小程序内置API实现基础朗读
-readContent() {
-  wx.showToast({
-    title: this.data.knowledgeDetail.content,
-    icon: 'none',
-    duration: 2000,
-    // 开启语音朗读
-    complete: () => {
-      wx.setInnerAudioOption({
-        obeyMuteSwitch: false
-      });
-    }
-  });
-},
-  // readContent() {
-  //   wx.showToast({
-  //     title: '即将集成朗读功能',
-  //     icon: 'none'
-  //   });
-  // },
+  readContent() {
+    wx.showToast({
+      title: '即将集成朗读功能',
+      icon: 'none'
+    });
+  },
 
   /**
    * 预留：朗读例句按钮事件（第13步集成TTS时补充）

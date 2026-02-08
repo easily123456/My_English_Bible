@@ -1,41 +1,73 @@
 /* pages/library/index.wxss */
-@import "../../app.wxss";
+@import "../../app.wxss"; /* 导入全局颜色变量 */
 
-.page-container {
-  padding: 40rpx 30rpx;
+/* 页面容器 */
+.library-container {
+  padding: 30rpx 20rpx;
   background-color: var(--color-bg-gray);
   min-height: 100vh;
 }
 
-/* 页面标题样式 */
+/* 页面标题 */
 .page-title {
   font-size: 36rpx;
-  color: var(--color-text-primary);
   font-weight: bold;
+  color: var(--color-text-primary);
   margin-bottom: 40rpx;
   padding-left: 10rpx;
 }
 
-/* Grid布局容器：一行两列，自动换行 */
-.card-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* 一行两列，宽度均等 */
-  gap: 30rpx; /* 卡片之间的间距（水平+垂直） */
+/* 知识库卡片列表：核心flex布局实现一行两列 */
+.library-card-list {
+  display: flex;
+  flex-wrap: wrap; /*自动换行*/
+  justify-content: space-between; /* 两端对齐，列间距均匀 */
+  gap: 20rpx; /* 卡片间距（兼容微信基础库2.10.1+） */
 }
 
-/* 圆角卡片样式 */
-.knowledge-card {
+/* 单个知识库卡片：核心样式 */
+.library-card {
+  width: calc(50% - 30px); /* 一行两列，减去间距的一半 */
   background-color: var(--color-white);
-  border-radius: 20rpx; /* 圆角矩形 */
-  height: 200rpx;
+  border-radius: 20rpx; /* 圆角 */
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08); /* 阴影 */
+  padding: 40rpx 20rpx;
+  margin-bottom: 20rpx;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05); /* 轻微阴影，提升层次感 */
+  min-height: 200rpx; /* 固定最小高度，保证卡片大小一致 */
+  transition: transform 0.2s; /* 点击缩放动画 */
 }
 
-/* 卡片占位文字样式 */
-.card-placeholder {
+/* 卡片点击效果 */
+.library-card:active {
+  transform: scale(0.98); /* 轻微缩放 */
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+/* 卡片名称 */
+.card-name {
   font-size: 30rpx;
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
+  font-weight: 500;
+  margin-bottom: 20rpx;
+  text-align: center;
+}
+
+/* 卡片装饰图标 */
+.card-icon {
+  font-size: 60rpx;
+  opacity: 0.8;
+}
+
+/* 空数据提示（若需要） */
+.empty-tip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400rpx;
+  font-size: 28rpx;
+  color: var(--color-text-placeholder);
 }

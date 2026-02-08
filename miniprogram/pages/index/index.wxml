@@ -1,14 +1,22 @@
 <!-- pages/index/index.wxml -->
-<view class="page-container">
-  <!-- 标题区域：预留仪表盘标题 -->
-  <view class="title-area">
-    <text class="main-title">我的英语学习仪表盘</text>
-    <text class="sub-title">实时跟踪你的学习进度</text>
+<view class="index-container">
+  <!-- 仪表盘区域：显示知识点总数 -->
+  <view class="dashboard">
+    <text class="dashboard-title">我的学习仪表盘</text>
+    <view class="count-card">
+      <text class="count-label">已创建知识点</text>
+      <text class="count-value">{{knowledgeCount}}</text>
+      <text class="count-unit">个</text>
+    </view>
   </view>
 
-  <!-- 按钮容器：两个功能按钮（后续跳转创建页、继续学习） -->
-  <view class="btn-container">
-    <button class="func-btn primary-btn">创建新知识点</button>
-    <button class="func-btn secondary-btn">继续上次学习</button>
+  <!-- 功能按钮区域 -->
+  <view class="btn-group">
+    
+    <!-- 继续复习按钮 -->
+    <button class="func-btn review-btn" bindtap="goToReview">继续复习</button>
+    <!-- 创建知识点按钮 -->
+    <button class="func-btn create-btn" bindtap="goToCreate">创建知识点</button>
+
   </view>
 </view>

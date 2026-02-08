@@ -1,59 +1,84 @@
+
+
+
+
 /* pages/index/index.wxss */
-/* 导入全局样式（若app.wxss已配置色板） */
-@import "../../app.wxss";
+/* @import "../../app.wxss"; 导入全局颜色变量 */
 
-.page-container {
+/* 页面容器 */
+.index-container {
   padding: 40rpx 30rpx;
-  background-color: var(--color-bg-gray); /* 全局浅灰背景 */
+  background-color: var(--color-bg-gray);
   min-height: 100vh;
-}
-
-/* 标题区域样式 */
-.title-area {
-  text-align: center;
-  margin-bottom: 80rpx;
-}
-
-.main-title {
-  font-size: 36rpx;
-  color: var(--color-text-primary);
-  font-weight: bold;
-  display: block;
-  margin-bottom: 20rpx;
-}
-
-.sub-title {
-  font-size: 28rpx;
-  color: var(--color-text-secondary);
-  display: block;
-}
-
-/* 按钮容器样式 */
-.btn-container {
   display: flex;
   flex-direction: column;
-  gap: 30rpx; /* 按钮之间的间距 */
-  align-items: center;
+  gap: 60rpx;
 }
 
-.func-btn {
-  width: 80%;
-  height: 80rpx;
-  line-height: 80rpx;
-  border-radius: 40rpx; /* 圆角按钮 */
+/* 仪表盘区域 */
+.dashboard {
+  background-color: var(--color-white);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: var(--color-text-primary);
+  display: block;
+  margin-bottom: 30rpx;
+}
+
+.count-card {
+  display: flex;
+  align-items: baseline;
+  gap: 10rpx;
+}
+
+.count-label {
   font-size: 30rpx;
+  color: var(--color-text-secondary);
 }
 
-/* 主按钮（科技蓝） */
-.primary-btn {
-  background-color: var(--color-primary);
-  color: var(--color-white);
+.count-value {
+  font-size: 60rpx;
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+.count-unit {
+  font-size: 30rpx;
+  color: var(--color-text-secondary);
+}
+
+/* 功能按钮组 */
+.btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+  padding: 0 20rpx;
+}
+
+/* 通用功能按钮 */
+.func-btn {
+  height: 90rpx;
+  line-height: 90rpx;
+  border-radius: 45rpx;
+  font-size: 32rpx;
   border: none;
 }
 
-/* 次要按钮（线框蓝） */
-.secondary-btn {
-  background-color: transparent;
+/* 创建按钮样式 */
+.create-btn {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+/* 复习按钮样式 */
+.review-btn {
+  background-color: var(--color-primary-bg);
   color: var(--color-primary);
   border: 2rpx solid var(--color-primary);
 }
