@@ -1,0 +1,35 @@
+<!-- pages/library/detail.wxml -->
+<view class="container">
+  <!-- 顶部返回+标题 -->
+  <view class="header">
+    <button class="back-btn" bindtap="goBack">←</button>
+    <view class="library-title">{{libraryName}}</view>
+  </view>
+
+  <!-- 知识点列表 -->
+  <view class="item-list" wx:if="{{itemList.length > 0}}">
+    <view class="item-card" wx:for="{{itemList}}" wx:key="_id">
+      <!-- 英文 -->
+      <view class="item-en">{{item.en}}</view>
+      
+      <!-- 词性-释义列表 -->
+      <view class="pos-zh-list" wx:for="{{item.posZh}}" wx:for-item="posZhItem" wx:key="index">
+        <view class="pos-zh-item">
+          <text class="pos">{{posZhItem.pos}}</text>
+          <text class="zh">：{{posZhItem.zh}}</text>
+        </view>
+      </view>
+      
+      <!-- 例句（有则显示） -->
+      <view class="item-example" wx:if="{{item.example}}">
+        例句：{{item.example}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 空数据提示 -->
+  <view class="empty-tip" wx:else>
+    <text>该知识库暂无知识点，快去创建吧～</text>
+    <button class="create-btn" bindtap="goToCreate">创建知识点</button>
+  </view>
+</view>

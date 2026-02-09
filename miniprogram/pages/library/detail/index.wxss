@@ -1,0 +1,135 @@
+/* pages/library/detail.wxss */
+.container {
+  padding: 0;
+  background-color: var(--color-bg-gray);
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.header {
+  background-color: var(--color-white);
+  padding: 20rpx 30rpx;
+  display: flex;
+  align-items: center;
+  border-bottom: 1rpx solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.back-btn {
+  width: 60rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  padding: 0;
+  background-color: transparent;
+  font-size: 32rpx;
+  color: var(--color-text-primary);
+  border: none;
+  transition: color 0.2s;
+}
+
+.back-btn:active {
+  color: var(--color-primary);
+}
+
+.library-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--color-text-primary);
+  margin-left: 20rpx;
+  flex: 1;
+  text-align: center;
+}
+
+/* 🌟 间距设置1：词条列表的左右内边距（控制卡片和屏幕边缘的间距） */
+/* 你可以修改 padding 的值调整左右间距，比如 10rpx/30rpx/40rpx */
+.item-list {
+  padding: 15rpx 20rpx; /* 上下15rpx，左右20rpx → 核心左右间距 */
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  /* 🌟 间距设置2：词条卡片之间的上下间距 */
+  /* 你可以修改 gap 的值调整卡片间距，比如 10rpx/20rpx/30rpx */
+  gap: 15rpx; 
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 词条卡片样式（保留圆角和轻微阴影，更美观） */
+.item-card {
+  background-color: var(--color-white);
+  padding: 30rpx; /* 🌟 间距设置3：卡片内部的内边距（文字和卡片边缘的距离） */
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 10rpx; /* 圆角，可选 */
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05); /* 轻微阴影，可选 */
+  margin: 0;
+}
+
+.item-en {
+  font-size: 32rpx;
+  color: var(--color-primary);
+  font-weight: 600;
+  margin-bottom: 15rpx;
+}
+
+.pos-zh-list {
+  margin-bottom: 15rpx;
+}
+
+.pos-zh-item {
+  font-size: 28rpx;
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  margin-bottom: 5rpx;
+}
+
+.pos {
+  color: var(--color-warning);
+  font-weight: 600;
+}
+
+.zh {
+  color: var(--color-text-primary);
+}
+
+.item-example {
+  font-size: 26rpx;
+  color: var(--color-text-secondary);
+  font-style: italic;
+  padding-top: 10rpx;
+  border-top: 1rpx dashed var(--color-border);
+}
+
+.empty-tip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  gap: 30rpx;
+}
+
+.empty-tip text {
+  font-size: 28rpx;
+  color: var(--color-text-placeholder);
+}
+
+.create-btn {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  padding: 15rpx 40rpx;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  transition: background-color 0.2s;
+}
+
+.create-btn:active {
+  background-color: var(--color-primary-dark);
+}

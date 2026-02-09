@@ -1,21 +1,22 @@
 <!-- pages/library/index.wxml -->
-<view class="library-container">
+<view class="container">
   <!-- 页面标题 -->
   <view class="page-title">我的知识库</view>
-  
-  <!-- 知识库卡片列表（核心：flex-wrap: wrap实现一行两列） -->
-  <view class="library-card-list">
+
+  <!-- 知识库列表 -->
+  <view class="library-list">
     <view 
-      class="library-card" 
+      class="library-item" 
       wx:for="{{libraryList}}" 
-      wx:key="index"
-      bindtap="goToLibraryDetail" 
-      data-library="{{item}}"
-    ><!-- 预留点击事件，后续可跳转知识库详情 -->
-      <!-- 卡片内容 -->
-      <text class="card-name">{{item.name}}</text>
-      <!-- 卡片装饰（可选） -->
-      <view class="card-icon">📚</view>
+      wx:key="_id"
+      bindtap="goToDetail"
+      data-library-id="{{item._id}}"
+      data-library-name="{{item.name}}"
+    >
+      <view class="library-name">{{item.name}}</view>
+
+      <view class="library-desc">{{item.description}}</view>
+      <view class="arrow-icon">→</view>
     </view>
   </view>
 </view>
