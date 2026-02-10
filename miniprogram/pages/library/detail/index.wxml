@@ -12,12 +12,10 @@
       <!-- 英文 -->
       <view class="item-en">{{item.en}}</view>
       
-      <!-- 词性-释义列表 -->
-      <view class="pos-zh-list" wx:for="{{item.posZh}}" wx:for-item="posZhItem" wx:key="index">
-        <view class="pos-zh-item">
-          <text class="pos">{{posZhItem.pos}}</text>
-          <text class="zh">：{{posZhItem.zh}}</text>
-        </view>
+      <!-- 词性-释义（单组展示，适配新结构） -->
+      <view class="pos-zh-item">
+        <text class="pos">{{item.pos}}</text>
+        <text class="zh"> {{item.zh}}</text>
       </view>
       
       <!-- 例句（有则显示） -->
@@ -27,6 +25,19 @@
     </view>
   </view>
 
+  <!-- 开始复习按钮 -->
+  <view class="review-btn-wrap" wx:if="{{itemList.length > 0}}">
+    <button 
+      class="review-btn" 
+      bindtap="startReview"
+      data-library-id="{{libraryId}}"
+      data-library-type="{{libraryType}}"
+      data-library-name="{{libraryName}}"
+    >
+      开始复习
+    </button>
+  </view>
+  
   <!-- 空数据提示 -->
   <view class="empty-tip" wx:else>
     <text>该知识库暂无知识点，快去创建吧～</text>

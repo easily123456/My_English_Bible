@@ -1,0 +1,62 @@
+<view class="container">
+  <!-- 复习类型切换 -->
+  <view class="type-tab">
+    <view 
+      class="tab-item {{currentType === 'en2zh' ? 'active' : ''}}"
+      bindtap="switchReviewType"
+      data-type="en2zh"
+    >
+      英译中
+    </view>
+    <view 
+      class="tab-item {{currentType === 'zh2en' ? 'active' : ''}}"
+      bindtap="switchReviewType"
+      data-type="zh2en"
+    >
+      中译英
+    </view>
+  </view>
+
+  <!-- 复习卡片 -->
+  <view class="review-card" wx:if="{{currentItem}}">
+    <!-- 英译中：显示英文，输入中文 -->
+    <view class="question" wx:if="{{currentType === 'en2zh'}}">
+      <text>请翻译：</text>
+      <text class="en-text">{{currentItem.en}}</text>
+    </view>
+
+    <!-- 中译英：显示中文，输入英文 -->
+    <view class="question" wx:if="{{currentType === 'zh2en'}}">
+      <text>请翻译：</text>
+      <text class="zh-text">{{currentItem.zh}}</text>
+    </view>
+
+    <!-- 答案输入框 -->
+    <input 
+      class="answer-input"
+      placeholder="请输入答案"
+      value="{{userAnswer}}"
+      bindinput="inputAnswer"
+    />
+
+    <!-- 操作按钮 -->
+    <view class="btn-group">
+      <button class="btn" bindtap="showAnswer">查看答案</button>
+      <button class="btn" bindtap="nextItem">下一题</button>
+    </view>
+
+    <!-- 正确答案（点击查看后显示） -->
+    <view class="answer-wrap" wx:if="{{isShowAnswer}}">
+      <text class="label">正确答案：</text>
+      <text class="correct-answer">
+        {{currentType === 'en2zh' ? currentItem.zh : currentItem.en}}
+      </text>
+    </view>
+  </view>
+
+  <!-- 无数据提示 -->
+  <view class="empty-tip" wx:if="{{!currentItem && !isLoading}}">
+    <text>暂无复习内容</text>
+    <button class="back-btn" bindtap="goBack">返回知识库</button>
+  </view>
+</view>

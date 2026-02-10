@@ -1,31 +1,28 @@
 <!-- pages/knowledge/detail/index.wxml -->
 <view class="detail-container" wx:if="{{!isLoading}}">
-<!-- !isLoading意为查询成功即可渲染页面展示 -->
-  <!-- 知识点核心内容 -->
-  <view class="content-section">
-    <text class="content-label">知识点：</text>
-    <text class="content-value">{{knowledgeDetail.content}}</text>
-    <!-- 朗读内容按钮 -->
-    <button class="read-btn" bindtap="readContent">朗读内容</button>
+  <!-- 顶部标题：英文单词 -->
+  <view class="header-section">
+    <text class="header-label">英文：</text>
+    <text class="header-value">{{currentEn}}</text>
+    <button class="read-btn" bindtap="readCurrentEn">🔊</button>
   </view>
 
-  <!-- 释义与词性区域 -->
-  <view class="definitions-section">
-    <text class="section-title">释义与词性</text>
-    <view class="definitions-list">
-      <view class="definition-item" wx:for="{{knowledgeDetail.definitions}}" wx:key="index">
-        <text class="pos">{{item.partOfSpeech}}</text>
-        <text class="meaning">{{item.meaning}}</text>
+  <!-- 合并的知识点列表 -->
+  <view class="knowledge-list">
+    <view class="knowledge-item" wx:for="{{mergedKnowledgeList}}" wx:key="_id">
+      <!-- 词性+释义+出处 -->
+      <view class="def-line">
+        <text class="pos">{{item.pos}}</text>
+        <text class="zh">{{item.zh}}</text>
+        <text class="source">【出自：{{item.libraryName}}】</text>
+      </view>
+
+      <!-- 例句+朗读按钮 -->
+      <view class="sentence-line" wx:if="{{item.example}}">
+        <text class="sentence">{{item.example}}</text>
+        <text class="read-icon" bindtap="readSentence" data-sentence="{{item.example}}">🔊</text>
       </view>
     </view>
-  </view>
-
-  <!-- 例句区域（有例句才显示） -->
-  <view class="sentence-section" wx:if="{{knowledgeDetail.sentence}}">
-    <text class="section-title">例句</text>
-    <text class="sentence-value">{{knowledgeDetail.sentence}}</text>
-    <!-- 朗读例句按钮 -->
-    <button class="read-btn" bindtap="readSentence">朗读例句</button>
   </view>
 </view>
 

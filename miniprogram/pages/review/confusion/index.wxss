@@ -1,0 +1,111 @@
+/* pages/review/confusion/index.wxss */
+.container {
+  padding: 20rpx;
+  background-color: var(--color-bg-gray);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.confusion-card {
+  background-color: var(--color-white);
+  padding: 30rpx;
+  border-radius: 10rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
+  width: 90%;
+  max-width: 500rpx;
+}
+
+.title {
+  font-size: 28rpx;
+  color: var(--color-text-primary);
+  margin-bottom: 30rpx;
+  text-align: center;
+  font-weight: bold;
+}
+
+.confusion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.confusion-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.en-word {
+  font-size: 32rpx;
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+.answer-input {
+  width: 100%;
+  padding: 20rpx;
+  border: 1rpx solid var(--color-border);
+  border-radius: 10rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+.correct-zh {
+  font-size: 26rpx;
+  color: var(--color-success);
+  margin-top: 5rpx;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: center;
+}
+
+.btn {
+  width: 200rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  background-color: var(--color-primary-bg);
+  color: var(--color-primary);
+  border-radius: 10rpx;
+  font-size: 28rpx;
+}
+
+.result-wrap {
+  padding-top: 20rpx;
+  border-top: 1rpx dashed var(--color-border);
+  text-align: center;
+}
+
+.result {
+  font-size: 28rpx;
+  color: var(--color-text-primary);
+  font-weight: bold;
+}
+
+/* 空数据提示 */
+.empty-tip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.empty-tip text {
+  font-size: 28rpx;
+  color: var(--color-text-secondary);
+}
+
+.back-btn {
+  width: 200rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  background-color: var(--color-primary-bg);
+  color: var(--color-primary);
+  border-radius: 10rpx;
+  font-size: 28rpx;
+}

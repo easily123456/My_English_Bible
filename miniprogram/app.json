@@ -6,7 +6,11 @@
     "pages/knowledge/create/index",
     "pages/knowledge/list/index",
     "pages/knowledge/detail/index",
-    "pages/library/detail/index"
+    "pages/library/detail/index",
+    "pages/review/start/index",
+    "pages/review/single/index",
+    "pages/review/collection/index",
+    "pages/review/confusion/index"    
   ],
   "tabBar": {
     "color": "#666666",              

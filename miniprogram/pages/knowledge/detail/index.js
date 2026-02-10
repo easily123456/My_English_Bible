@@ -1,87 +1,95 @@
 // pages/knowledge/detail/index.js
-
-const db = wx.cloud.database();
+const db = wx.cloud.database()
 
 Page({
-  /**
-   * 页面的初始数据
-   */
   data: {
-    knowledgeDetail: null, // 存储单个知识点详情，初始为空
-    isLoading: true // 加载状态标识
+    currentEn: '',
+    mergedKnowledgeList: [],
+    isLoading: true,
+    libraryMap: {} // 缓存知识库名称映射，存有知识库id与知识库name，有知识点相关的知识库信息
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   * 接收列表页传递的id，查询对应知识点详情
-   */
   onLoad(options) {
-    // 1. 获取URL传递的知识点ID
-    const knowledgeId = options.id;
+    const knowledgeId = options.id
     if (!knowledgeId) {
-      wx.showToast({
-        title: '参数错误',
-        icon: 'none',
-        duration: 1500
-      });
-      // 无ID则返回上一页
-      setTimeout(() => {
-        wx.navigateBack();
-      }, 1500);
-      return;
+      wx.showToast({ title: '参数错误', icon: 'none' })
+      setTimeout(() => wx.navigateBack(), 1500)
+      return
     }
 
-    // 2. 加载提示
-    wx.showLoading({
-      title: '加载详情中...',
-      mask: true
-    });
+    wx.showLoading({ title: '加载详情中...', mask: true })
+    this.loadKnowledgeAndRelations(knowledgeId)
+  },
 
-    // 3. 查询单条知识点数据（doc(id)定位唯一记录）
-    db.collection('knowledge_items')
-      .doc(knowledgeId) // 通过ID精准查询
-      .get({
-        success: (res) => {
-          // 4. 查询成功：更新数据，关闭加载
-          this.setData({
-            knowledgeDetail: res.data,
-            isLoading: false
-          });
-          wx.hideLoading();
-        },
-        fail: (err) => {
-          // 5. 查询失败：提示并返回上一页
-          wx.hideLoading();
-          wx.showToast({
-            title: '详情加载失败',
-            icon: 'none',
-            duration: 2000
-          });
-          console.error('知识点详情查询失败：', err);
-          setTimeout(() => {
-            wx.navigateBack();
-          }, 2000);
+  // 加载当前知识点并关联所有同英文的知识点
+  async loadKnowledgeAndRelations(knowledgeId) {
+    try {
+      // 1. 获取当前知识点详情
+      const currentRes = await db.collection('knowledge_items').doc(knowledgeId).get()
+      const currentEn = currentRes.data.en
+      this.setData({ currentEn })
+
+      // 2. 查询所有同英文的知识点
+      const sameEnRes = await db.collection('knowledge_items')
+        .where({ en: currentEn })
+        .get()
+      const sameEnList = sameEnRes.data 
+
+      // 3. 批量获取所有关联的记录
+      const allItemIds = sameEnList.map(item => item._id)
+      const relationsRes = await db.collection('item_set_relations')
+        .where({ itemId: db.command.in(allItemIds), setType: 'library' })
+        .get()
+
+      // 4. 缓存所有知识库名称
+      const libraryIds = [...new Set(relationsRes.data.map(r => r.setId))]
+      //relationsRes遍历提取setId属性，并用以创建Set集合，展开后赋值给libraryIds
+      //libraryIds是知识点所存的知识库列表
+      const libraryRes = await db.collection('libraries')
+        .where({ _id: db.command.in(libraryIds) })
+        .get()
+      //libraryRes是libraries对应的记录集合
+    
+      const libraryMap = {}
+      libraryRes.data.forEach(lib => libraryMap[lib._id] = lib.name)
+      //forEach也是遍历数组并执行回调函数，并且其不会生成新的数组，map会产生新的数组
+      this.setData({ libraryMap })
+
+      // 5. 合并知识点与知识库信息
+      const mergedList = sameEnList.map(item => {
+        // 找到该知识点对应的知识库名称
+        const relation = relationsRes.data.find(r => r.itemId === item._id)
+        return {
+          ...item,
+          libraryName: relation ? libraryMap[relation.setId] : '未知知识库'
         }
-      });
+      })
+      //这一步是将 在knowledge_items中与currentEn相关的记录集合 与 在item_set_relations中与currentEn相关的记录集合 的知识点id进行比较，若比较相同则再比较知识库id，如果不同则归为“未知知识库”
+
+      this.setData({
+        mergedKnowledgeList: mergedList,
+        isLoading: false
+      })
+      wx.hideLoading()
+    } catch (err) {
+      wx.hideLoading()
+      wx.showToast({ title: '加载失败', icon: 'none' })
+      console.error('合并知识点加载失败：', err)
+      setTimeout(() => wx.navigateBack(), 2000)
+    }
   },
 
-  /**
-   * 预留：朗读内容按钮事件（第13步集成TTS时补充）
-   */
-  readContent() {
-    wx.showToast({
-      title: '即将集成朗读功能',
-      icon: 'none'
-    });
+  // 朗读当前英文单词
+  readCurrentEn() {
+    const { currentEn } = this.data
+    wx.showToast({ title: `朗读：${currentEn}`, icon: 'none' })
+    // 后续可集成TTS API：wx.showToast只是临时占位
   },
 
-  /**
-   * 预留：朗读例句按钮事件（第13步集成TTS时补充）
-   */
-  readSentence() {
-    wx.showToast({
-      title: '即将集成朗读功能',
-      icon: 'none'
-    });
+  // 朗读例句
+  readSentence(e) {
+    const sentence = e.currentTarget.dataset.sentence
+    wx.showToast({ title: `朗读例句：${sentence}`, icon: 'none' })
+    // 后续可集成TTS API
   }
-});
+})

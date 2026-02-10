@@ -9,21 +9,20 @@
       bindtap="goToDetail" 
       data-id="{{item._id}}" 
     >
-    <!-- 用知识点唯一ID做key，比index更稳定 -->
-    <!-- 绑定点击跳转事件 -->
-    <!-- item._id意为当前循环到的变量的ID。存储知识点ID，供goToDetail函数获取 -->
-      <!-- 知识点核心内容 -->
-      <view class="content">{{item.content}}</view>
-      <!-- 简化版释义（取第一个释义，避免列表过长） -->
+      <!-- 知识点核心内容（英文） -->
+      <view class="content">{{item.en}}</view>
+      <!-- 简化版释义（单组展示，适配新结构） -->
       <view class="brief-definition">
-        <text wx:if="{{item.definitions[0]}}"> <!-- 判断是否存在 -->
-          {{item.definitions[0].partOfSpeech}} {{item.definitions[0].meaning}}
-          <!-- 提取词性和释义显示在text中  -->
+        <text wx:if="{{item.pos && item.zh}}">
+          {{item.pos}} {{item.zh}}
+        </text>
+        <text wx:elif="{{item.pos || item.zh}}">
+          {{item.pos || item.zh}}
         </text>
         <text wx:else>无释义</text>
       </view>
-      <!-- 创建时间（格式化，可选） -->
-      <view class="create-time">{{item.createTime}}</view>
+      <!-- 创建时间（格式化显示，优化体验） -->
+      <view class="create-time">{{formatCreateTime(item.createTime)}}</view>
     </view>
   </view>
 

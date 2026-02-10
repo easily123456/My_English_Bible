@@ -1,0 +1,35 @@
+<view class="container">
+  <!-- 自测卡片 -->
+  <view class="collection-card" wx:if="{{currentQuestion}}">
+    <view class="question-title">自由默写</view>
+    <view class="question-content">{{currentQuestion}}</view>
+
+    <textarea 
+      class="answer-textarea"
+      placeholder="请输入你的答案"
+      value="{{userAnswer}}"
+      bindinput="inputAnswer"
+    ></textarea>
+
+    <view class="btn-group">
+      <button class="btn" bindtap="checkAnswer">核对答案</button>
+      <button class="btn" bindtap="nextQuestion">下一题</button>
+    </view>
+
+    <!-- 答案核对结果 -->
+    <view class="result-wrap" wx:if="{{isCheck}}">
+      <view class="result {{isCorrect ? 'correct' : 'error'}}">
+        {{isCorrect ? '回答正确 ✔️' : '回答错误 ❌'}}
+      </view>
+      <view class="correct-answer" wx:if="!isCorrect">
+        正确答案：{{currentAnswer}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 无数据提示 -->
+  <view class="empty-tip" wx:if="{{!currentQuestion && !isLoading}}">
+    <text>暂无自测内容</text>
+    <button class="back-btn" bindtap="goBack">返回知识库</button>
+  </view>
+</view>

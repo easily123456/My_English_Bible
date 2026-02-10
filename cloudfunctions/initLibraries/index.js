@@ -18,40 +18,40 @@ exports.main = async (event, context) => {
     const libraryList = [
       {
         name: "单词集合（英译中）",
-        type: "single", // 单点复习类型
+        libraryType: "single", // 单点复习类型
         reviewType: "en_to_zh", // 英→中复习方向
         description: "核心阅读高频英语词汇，采用英→中单点复习模式"
       },
       {
         name: "单词集合（中译英）",
-        type: "single", // 单点复习类型
+        libraryType: "single", // 单点复习类型
         reviewType: "zh_to_en", // 英→中复习方向
         description: "核心作文高频英语词汇，采用中→英单点复习模式"
       },
       {
         name: "词组大全",
-        type: "single", // 单点复习类型
+        libraryType: "single", // 单点复习类型
         reviewType: "en_to_zh", // 英→中复习方向
         description: "核心阅读高频英语词汇，采用英→中单点复习模式"
       },
       {
         name: "功能句型",
-        type: "collection", 
+        libraryType: "collection", 
         description: "作文常用短句"
       },
       {
         name: "作文高级词汇",
-        type: "collection", 
+        libraryType: "collection", 
         description: "作文常用升级词汇"
       },
       {
         name: "易混淆词汇",
-        type: "confusion", // 混淆自测类型（无reviewType）
+        libraryType: "confusion", // 混淆自测类型（无reviewType）
         description: "易混淆英语词组，采用混淆自测模式"
       },
       {
         name: "作文模板",
-        type: "display",
+        libraryType: "display",
         description: "常用作文模板"
       },
     ]

@@ -1,0 +1,9 @@
+<!-- pages/review/start/start.wxml -->
+<view class="container">
+  <view class="loading-box">
+    <van-loading type="spinner" color="#1a7bff" size="40rpx" />
+    <!-- 显示一个加载中的动画效果 -->
+    <!-- type="spinner"意为加载动画为旋转圆圈 -->
+    <text class="loading-text">正在准备{{libraryName}}的复习内容...</text>
+  </view>
+</view>

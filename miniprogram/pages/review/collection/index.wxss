@@ -1,0 +1,112 @@
+/* pages/review/collection/index.wxss */
+.container {
+  padding: 20rpx;
+  background-color: var(--color-bg-gray);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.collection-card {
+  background-color: var(--color-white);
+  padding: 30rpx;
+  border-radius: 10rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
+  width: 90%;
+  max-width: 500rpx;
+}
+
+.question-title {
+  font-size: 28rpx;
+  color: var(--color-text-secondary);
+  margin-bottom: 10rpx;
+  text-align: center;
+}
+
+.question-content {
+  font-size: 36rpx;
+  color: var(--color-primary);
+  font-weight: bold;
+  margin-bottom: 30rpx;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.answer-textarea {
+  width: 100%;
+  min-height: 150rpx;
+  padding: 20rpx;
+  border: 1rpx solid var(--color-border);
+  border-radius: 10rpx;
+  font-size: 28rpx;
+  margin-bottom: 30rpx;
+  box-sizing: border-box;
+}
+
+.btn-group {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+  justify-content: center;
+}
+
+.btn {
+  flex: 1;
+  max-width: 200rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  background-color: var(--color-primary-bg);
+  color: var(--color-primary);
+  border-radius: 10rpx;
+  font-size: 28rpx;
+}
+
+.result-wrap {
+  padding-top: 20rpx;
+  border-top: 1rpx dashed var(--color-border);
+  text-align: center;
+}
+
+.result {
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+
+.result.correct {
+  color: var(--color-success);
+}
+
+.result.error {
+  color: var(--color-error);
+}
+
+.correct-answer {
+  font-size: 26rpx;
+  color: var(--color-primary);
+}
+
+/* 空数据提示 */
+.empty-tip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.empty-tip text {
+  font-size: 28rpx;
+  color: var(--color-text-secondary);
+}
+
+.back-btn {
+  width: 200rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  background-color: var(--color-primary-bg);
+  color: var(--color-primary);
+  border-radius: 10rpx;
+  font-size: 28rpx;
+}

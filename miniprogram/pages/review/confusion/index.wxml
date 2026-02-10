@@ -1,0 +1,43 @@
+<view class="container">
+  <!-- 混淆自测卡片 -->
+  <view class="confusion-card" wx:if="{{confusionList.length > 0}}">
+    <view class="title">混淆自测 - 写出下列英文的中文释义</view>
+
+    <!-- 混淆组列表 -->
+    <view class="confusion-list">
+      <view class="confusion-item" wx:for="{{confusionList}}" wx:key="en">
+        <view class="en-word">{{item.en}}</view>
+        <input 
+          class="answer-input"
+          placeholder="请输入中文释义"
+          value="{{userAnswers[item.en] || ''}}"
+          data-en="{{item.en}}"
+          bindinput="inputAnswer"
+        />
+        <!-- 正确答案（核对后显示） -->
+        <view class="correct-zh" wx:if="{{isCheck}}">
+          正确释义：{{item.zh}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="btn-group">
+      <button class="btn" bindtap="checkAllAnswer" wx:if="!isCheck">核对所有答案</button>
+      <button class="btn" bindtap="restartReview" wx:if="{{isCheck}}">重新自测</button>
+    </view>
+
+    <!-- 自测结果（核对后显示） -->
+    <view class="result-wrap" wx:if="{{isCheck}}">
+      <view class="result">
+        正确率：{{correctCount}}/{{totalCount}} ({{(correctCount/totalCount)*100 | number}}%)
+      </view>
+    </view>
+  </view>
+
+  <!-- 无数据提示 -->
+  <view class="empty-tip" wx:if="{{confusionList.length === 0 && !isLoading}}">
+    <text>暂无混淆自测内容</text>
+    <button class="back-btn" bindtap="goBack">返回知识库</button>
+  </view>
+</view>
