@@ -58,7 +58,7 @@ Page({
   goToDetail(e) {
     const knowledgeId = e.currentTarget.dataset.id;
     wx.navigateTo({
-      url: `/pages/knowledge/detail/index?id=${knowledgeId}`
+      url: `/pages/knowledge/detail/index?knowledgeId=${knowledgeId}`
     });
   },
 

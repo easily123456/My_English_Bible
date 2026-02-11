@@ -1,4 +1,6 @@
 {
-  "navigationBarTitleText": "复习准备中",
-  "enablePullDownRefresh": false  
+  "navigationBarTitleText": "复习准备",
+  "backgroundTextStyle": "dark",
+  "backgroundColor": "#f5f5f7",
+  "enablePullDownRefresh": false
 }

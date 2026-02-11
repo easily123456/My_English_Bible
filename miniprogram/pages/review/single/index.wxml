@@ -1,62 +1,62 @@
+<!-- pages/review/single/index.wxml -->
 <view class="container">
-  <!-- 复习类型切换 -->
-  <view class="type-tab">
-    <view 
-      class="tab-item {{currentType === 'en2zh' ? 'active' : ''}}"
-      bindtap="switchReviewType"
-      data-type="en2zh"
-    >
-      英译中
-    </view>
-    <view 
-      class="tab-item {{currentType === 'zh2en' ? 'active' : ''}}"
-      bindtap="switchReviewType"
-      data-type="zh2en"
-    >
-      中译英
+  <!-- 复习进度 -->
+  <view class="progress-bar" wx:if="{{reviewList.length > 0}}">
+    <text class="progress-text">{{currentIndex + 1}}/{{reviewList.length}}</text>
+    <view class="progress-bg">
+      <view 
+        class="progress-fill" 
+        wx:style="'width: ' + (currentIndex + 1)/reviewList.length*100 + '%'"
+      ></view>
+
     </view>
   </view>
 
   <!-- 复习卡片 -->
   <view class="review-card" wx:if="{{currentItem}}">
-    <!-- 英译中：显示英文，输入中文 -->
-    <view class="question" wx:if="{{currentType === 'en2zh'}}">
+    <!-- 出题区域（根据reviewType决定显示英文/中文） -->
+    <view class="question">
       <text>请翻译：</text>
-      <text class="en-text">{{currentItem.en}}</text>
-    </view>
-
-    <!-- 中译英：显示中文，输入英文 -->
-    <view class="question" wx:if="{{currentType === 'zh2en'}}">
-      <text>请翻译：</text>
-      <text class="zh-text">{{currentItem.zh}}</text>
-    </view>
-
-    <!-- 答案输入框 -->
-    <input 
-      class="answer-input"
-      placeholder="请输入答案"
-      value="{{userAnswer}}"
-      bindinput="inputAnswer"
-    />
-
-    <!-- 操作按钮 -->
-    <view class="btn-group">
-      <button class="btn" bindtap="showAnswer">查看答案</button>
-      <button class="btn" bindtap="nextItem">下一题</button>
-    </view>
-
-    <!-- 正确答案（点击查看后显示） -->
-    <view class="answer-wrap" wx:if="{{isShowAnswer}}">
-      <text class="label">正确答案：</text>
-      <text class="correct-answer">
-        {{currentType === 'en2zh' ? currentItem.zh : currentItem.en}}
+      <text class="{{reviewType === 'en2zh' ? 'en-text' : 'zh-text'}}">
+        {{reviewType === 'en2zh' ? currentItem.en : currentItem.zh}}
       </text>
     </view>
+
+    <!-- 默写输入框 -->
+    <textarea 
+      class="answer-textarea"
+      placeholder="请输入你的答案（可空）"
+      value="{{userAnswer}}"
+      bindinput="inputAnswer"
+      auto-height
+    ></textarea>
+
+    <!-- 核心操作按钮：默写已完成 -->
+    <button 
+      class="complete-btn" 
+      bindtap="completeReview"
+      loading="{{isSubmitting}}"
+    >
+      默写已完成
+    </button>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-tip" wx:if="{{isLoading && !currentItem}}">
+    <view class="loading-spinner"></view>
+    <text>正在生成复习题库...</text>
   </view>
 
   <!-- 无数据提示 -->
-  <view class="empty-tip" wx:if="{{!currentItem && !isLoading}}">
+  <view class="empty-tip" wx:if="{{!isLoading && reviewList.length === 0 && !currentItem}}">
     <text>暂无复习内容</text>
+    <button class="back-btn" bindtap="goBack">返回知识库</button>
+  </view>
+
+  <!-- 复习完成提示 -->
+  <view class="finish-tip" wx:if="{{!currentItem && reviewList.length > 0 && !isLoading}}">
+    <text>🎉 本次复习完成！</text>
+    <text class="finish-stat">共复习 {{reviewList.length}} 个知识点</text>
     <button class="back-btn" bindtap="goBack">返回知识库</button>
   </view>
 </view>

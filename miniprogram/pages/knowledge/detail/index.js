@@ -5,12 +5,16 @@ Page({
   data: {
     currentEn: '',
     mergedKnowledgeList: [],
+    isHighlight: false,
     isLoading: true,
     libraryMap: {} // 缓存知识库名称映射，存有知识库id与知识库name，有知识点相关的知识库信息
   },
 
   onLoad(options) {
-    const knowledgeId = options.id
+    const { knowledgeId, highlight } = options;
+    
+    this.setData({ isHighlight: highlight === '1' });
+    console.log("miniprogram\pages\knowledge\detail\index.js文件下15行：输出传入的isHighlight值 "+this.data.isHighlight);
     if (!knowledgeId) {
       wx.showToast({ title: '参数错误', icon: 'none' })
       setTimeout(() => wx.navigateBack(), 1500)

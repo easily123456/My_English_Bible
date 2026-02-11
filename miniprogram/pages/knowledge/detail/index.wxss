@@ -1,4 +1,9 @@
 /* pages/knowledge/detail/index.wxss */
+.header-value.highlight {
+  color: red;
+}
+
+
 .detail-container {
   padding: 20rpx;
   background-color: var(--color-bg-gray);

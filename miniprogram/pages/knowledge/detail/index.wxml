@@ -3,7 +3,7 @@
   <!-- 顶部标题：英文单词 -->
   <view class="header-section">
     <text class="header-label">英文：</text>
-    <text class="header-value">{{currentEn}}</text>
+    <text class="header-value {{isHighlight ? 'highlight' : ''}}">{{currentEn}}</text>
     <button class="read-btn" bindtap="readCurrentEn">🔊</button>
   </view>
 
