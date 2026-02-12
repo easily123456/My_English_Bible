@@ -1,0 +1,99 @@
+/* pages/search/index.wxss */
+
+.item-meta {
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  justify-content: space-between; /* 两端对齐 */
+  width: 100%; /* 确保占满父容器宽度 */
+}
+
+.search-container {
+  padding: 0;
+  background-color: var(--color-bg-gray);
+  min-height: 100vh;
+}
+
+/* 搜索栏 */
+.search-bar {
+  display: flex;
+  align-items: center;
+  padding: 10rpx 20rpx;
+  background-color: var(--color-white);
+  border-bottom: 1rpx solid var(--color-border);
+}
+
+.search-input {
+  flex: 1;
+  height: 70rpx;
+  line-height: 70rpx;
+  padding: 0 20rpx;
+  background-color: var(--color-primary-bg);
+  border-radius: 35rpx;
+  font-size: 28rpx;
+  color: var(--color-text-primary);
+}
+
+.placeholder-text {
+  color: var(--color-text-placeholder);
+}
+
+.cancel-btn {
+  margin-left: 20rpx;
+  width: 120rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  background-color: transparent;
+  color: var(--color-primary);
+  font-size: 28rpx;
+}
+
+/* 结果列表 */
+.result-list {
+  padding: 20rpx;
+}
+
+.result-count {
+  display: block;
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+  margin-bottom: 15rpx;
+}
+
+.result-item {
+  background-color: var(--color-white);
+  padding: 20rpx;
+  border-radius: 12rpx;
+  margin-bottom: 15rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
+}
+
+.item-en {
+  font-size: 30rpx;
+  color: var(--color-primary);
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+
+.item-zh {
+  font-size: 28rpx;
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  flex: 1;
+}
+
+.item-source {
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+  margin-left: 20rpx; /* 可选：增加与中文释义的间距 */
+  flex-shrink: 0; /* 禁止压缩来源标签 */
+}
+
+/* 空提示/加载提示 */
+.empty-tip, .loading-tip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200rpx;
+  font-size: 28rpx;
+  color: var(--color-text-secondary);
+}

@@ -1,9 +1,26 @@
-
-
-
-
 /* pages/index/index.wxss */
 /* @import "../../app.wxss"; 导入全局颜色变量 */
+/* pages/index/index.wxss */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15rpx 20rpx;
+  background-color: var(--color-white);
+  border-bottom: 1rpx solid var(--color-border);
+}
+
+.title {
+  font-size: 32rpx;
+  color: var(--color-text-primary);
+  font-weight: bold;
+}
+
+.search-icon {
+  color: var(--color-primary);
+  padding: 10rpx;
+}
+
 
 /* 页面容器 */
 .index-container {

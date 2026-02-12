@@ -1,0 +1,50 @@
+<!-- pages/search/index.wxml -->
+<view class="search-container">
+  <!-- 搜索输入区域 -->
+  <view class="search-bar">
+    <input 
+      class="search-input"
+      placeholder="输入英文关键字搜索..."
+      placeholder-class="placeholder-text"
+      bindinput="onSearchInput"
+      focus="{{true}}"
+    />
+    <button class="cancel-btn" bindtap="goBack">取消</button>
+  </view>
+
+  <!-- 搜索结果区域 -->
+  <view class="result-list" wx:if="{{resultList.length > 0}}">
+    <text class="result-count">找到 {{resultList.length}} 个匹配结果</text>
+    <!-- 循环渲染结果项 -->
+    <view 
+      class="result-item"
+      wx:for="{{resultList}}"
+      wx:key="_id"
+      bindtap="goToDetail"
+      data-id="{{item._id}}"
+      data-type="{{item.sourceType}}"
+    >
+      <!-- 英文词条（高亮关键字） -->
+      <view class="item-en">
+        <rich-text nodes="{{item.highlightEn}}"></rich-text>
+      </view>
+
+      <view class="item-meta">
+        <!-- 中文释义 -->
+        <view class="item-zh">{{item.pos}} {{item.zh}}</view>
+        <!-- 来源标签 -->
+        <view class="item-source">{{item.sourceName}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 无结果提示 -->
+  <view class="empty-tip" wx:if="{{!isLoading && resultList.length === 0 && keyword}}">
+    <text>未找到匹配的知识点</text>
+  </view>
+
+  <!-- 加载提示 -->
+  <view class="loading-tip" wx:if="{{isLoading}}">
+    <text>搜索中...</text>
+  </view>
+</view>

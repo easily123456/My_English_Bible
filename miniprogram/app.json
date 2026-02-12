@@ -11,7 +11,8 @@
     "pages/review/single/index",
     "pages/review/collection/index",
     "pages/review/confusion/index",    
-    "pages/review/report/index"
+    "pages/review/report/index",
+    "pages/search/index"
   ],
   "tabBar": {
     "color": "#666666",              

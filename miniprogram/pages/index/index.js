@@ -72,5 +72,11 @@ Page({
       title: '复习功能即将上线',
       icon: 'none'
     });
+  },
+  // 新增跳转搜索页方法
+  goToSearch() {
+    wx.navigateTo({
+      url: '/pages/search/index'
+    });
   }
 });

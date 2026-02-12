@@ -1,4 +1,11 @@
 <!-- pages/index/index.wxml -->
+<view class="header">
+  <text class="title">我的英语宝典</text>
+  <!-- 新增：搜索入口 -->
+  <icon type="search" size="20" class="search-icon" bindtap="goToSearch" />
+</view>
+
+
 <view class="index-container">
   <!-- 仪表盘区域：显示知识点总数 -->
   <view class="dashboard">
