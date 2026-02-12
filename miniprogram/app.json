@@ -10,7 +10,8 @@
     "pages/review/start/index",
     "pages/review/single/index",
     "pages/review/collection/index",
-    "pages/review/confusion/index"    
+    "pages/review/confusion/index",    
+    "pages/review/report/index"
   ],
   "tabBar": {
     "color": "#666666",              

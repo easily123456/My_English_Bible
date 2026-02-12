@@ -17,6 +17,11 @@ Page({
     userAnswer: '',      // 用户默写答案
     isSubmitting: false, // 提交状态锁
     
+    // 新增：复习结果记录字段（不影响原有逻辑）
+    userAnswerRecord: {}, // 记录每道题的用户答案 {itemId: answer}
+    correctCount: 0,      // 正确题数
+    correctItemIds: [],   // 正确题的itemId列表
+    
     // 加载状态
     isLoading: true
   },
@@ -24,7 +29,14 @@ Page({
   onLoad(options) {
     // 1. 接收参数
     const { libraryId, libraryName } = options;
-    this.setData({ libraryId, libraryName });
+    this.setData({ 
+      libraryId, 
+      libraryName,
+      // 初始化新增字段（避免undefined）
+      userAnswerRecord: {},
+      correctCount: 0,
+      correctItemIds: []
+    });
     wx.setNavigationBarTitle({ title: `${libraryName} - 单点复习` });
 
     // 2. 获取知识库配置（复习方向）
@@ -173,14 +185,27 @@ Page({
       // 1. 判定答案是否正确（忽略大小写/空格/标点）
       const correctAnswer = reviewType === 'en2zh' ? currentItem.zh : currentItem.en;
       const isCorrect = this.checkAnswer(userAnswer, correctAnswer);
+      
+      // 新增：记录当前题的用户答案
+      const { userAnswerRecord } = this.data;
+      userAnswerRecord[currentItem._id] = userAnswer.trim();
+      this.setData({ userAnswerRecord });
+
       // 2. 更新关联记录（reviewCount/lastReviewTime/mastery）
       await this.updateRelationRecord(currentItem.relationId, isCorrect);
-      // console.log("miniprogram\pages\review\single\index.js文件第178行：输出当前判定答案是否正确 "+isCorrect);
+
+      // 新增：如果答案正确，更新正确数和正确ID列表
+      if (isCorrect) {
+        const { correctCount, correctItemIds } = this.data;
+        this.setData({
+          correctCount: correctCount + 1,
+          correctItemIds: [...correctItemIds, currentItem._id]
+        });
+      }
 
       // 3. 判定结果处理
       if (!isCorrect) {
         // 错误：跳转到知识点详情页（标红提示）
-        // console.log("miniprogram\pages\review\single\index.js文件第183行：输出当前判定答案是否正确 "+isCorrect);
         wx.navigateTo({
           url: `/pages/knowledge/detail/index?knowledgeId=${currentItem._id}&highlight=1` // 传递错误标记
         });
@@ -237,12 +262,8 @@ Page({
     const nextIndex = currentIndex + 1;
 
     if (nextIndex >= reviewList.length) {
-      // 复习完成
-      this.setData({
-        currentItem: null,
-        userAnswer: ''
-      });
-      wx.showToast({ title: '复习完成！', icon: 'success' });
+      // 复习完成：跳转报告页
+      this.completeAllReview();
       return;
     }
 
@@ -251,6 +272,41 @@ Page({
       currentIndex: nextIndex,
       currentItem: reviewList[nextIndex],
       userAnswer: ''
+    });
+  },
+
+  /**
+   * 新增：完成所有复习，跳转报告页
+   */
+  completeAllReview() {
+    const { 
+      reviewList, 
+      userAnswerRecord, 
+      correctItemIds, 
+      libraryId, 
+      libraryName,
+      reviewType 
+    } = this.data;
+    
+    // 组装复习结果数据
+    const reviewResult = {
+      libraryId: libraryId,
+      libraryName: libraryName,
+      totalCount: reviewList.length,
+      correctCount: this.data.correctCount,
+      errorCount: reviewList.length - this.data.correctCount,
+      resultList: reviewList.map(item => ({
+        itemId: item._id,
+        question: reviewType === 'en2zh' ? item.en : item.zh,
+        userAnswer: userAnswerRecord[item._id] || '',
+        correctAnswer: reviewType === 'en2zh' ? item.zh : item.en,
+        isCorrect: correctItemIds.includes(item._id) // 判定是否正确
+      }))
+    };
+
+    // 跳转报告页（需将JSON转字符串并编码，避免URL解析问题）
+    wx.navigateTo({
+      url: `/pages/review/report/index?result=${encodeURIComponent(JSON.stringify(reviewResult))}`
     });
   },
 

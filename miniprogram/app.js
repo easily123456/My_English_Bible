@@ -16,4 +16,7 @@ App({
       });
     }
   },
+  globalData: {
+    errorItemIds: {} // 初始化为空对象，用于存储不同 libraryId 的错误项
+  },
 });

@@ -1,0 +1,82 @@
+<!-- pages/review/report/index.wxml -->
+<view class="container">
+  <!-- 报告概览 -->
+  <view class="report-overview">
+    <view class="overview-title">{{libraryName}} - 复习结果</view>
+    <view class="overview-stats">
+      <view class="stat-item">
+        <text class="stat-label">总复习</text>
+        <text class="stat-value total">{{totalCount}}</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">正确</text>
+        <text class="stat-value correct">{{correctCount}}</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">错误</text>
+        <text class="stat-value error">{{errorCount}}</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">正确率</text>
+        <text class="stat-value rate">{{accuracyRate}}%</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 详细结果列表 -->
+  <view class="result-list" wx:if="{{resultList.length > 0}}">
+    <view class="list-title">详细答题情况</view>
+    <!-- 循环渲染每道题 -->
+    <view 
+      class="result-item {{item.isCorrect ? 'correct-item' : 'error-item'}}"
+      wx:for="{{resultList}}"
+      wx:key="itemId"
+      bindtap="{{!item.isCorrect ? 'goToErrorDetail' : ''}}"
+      data-id="{{item.itemId}}"
+    >
+      <!-- 题目 -->
+      <view class="item-question">
+        <text class="label">题目：</text>
+        <text class="content">{{item.question}}</text>
+      </view>
+      <!-- 用户答案 -->
+      <view class="item-answer user">
+        <text class="label">你的答案：</text>
+        <text class="content">{{item.userAnswer || '未作答'}}</text>
+      </view>
+      <!-- 正确答案（错误时必显，正确时点击显示） -->
+      <view class="item-answer correct" wx:if="{{!item.isCorrect || isShowAnswer[item.itemId]}}">
+        <text class="label">正确答案：</text>
+        <text class="content">{{item.correctAnswer}}</text>
+      </view>
+      <!-- 正确答案展开按钮（仅正确题显示） -->
+      <button 
+        class="show-answer-btn"
+        wx:if="{{item.isCorrect && !isShowAnswer[item.itemId]}}"
+        bindtap="toggleShowAnswer"
+        data-id="{{item.itemId}}"
+      >
+        查看正确答案
+      </button>
+      <!-- 对错标记 -->
+      <view class="item-tag {{item.isCorrect ? 'correct-tag' : 'error-tag'}}">
+        {{item.isCorrect ? '正确 ✔️' : '错误 ❌'}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="btn-group" wx:if="{{errorCount > 0}}">
+    <button class="error-review-btn" bindtap="saveErrorItems">错题再练</button>
+    <button class="back-btn" bindtap="goBack">返回知识库</button>
+  </view>
+  <view class="btn-group" wx:else>
+    <button class="back-btn" bindtap="goBack">返回知识库</button>
+  </view>
+
+  <!-- 无数据提示 -->
+  <view class="empty-tip" wx:if="{{resultList.length === 0}}">
+    <text>暂无复习结果</text>
+    <button class="back-btn" bindtap="goBack">返回</button>
+  </view>
+</view>
