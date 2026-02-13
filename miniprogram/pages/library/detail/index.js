@@ -84,9 +84,10 @@ Page({
 
   // 跳转到创建知识点页面（补充传参：当前知识库ID，方便创建时自动选中）
   goToCreate() {
+    const { libraryId, libraryName } = this.data;
     wx.navigateTo({
-      url: `/pages/knowledge/create/index?libraryId=${this.data.libraryId}`
-    })
+      url: `/pages/knowledge/create/index?libraryId=${libraryId}&libraryName=${libraryName}`
+    });
   },
 
   // 查询知识库详情（获取libraryType）
@@ -113,5 +114,11 @@ Page({
       url: `/pages/review/start/index?libraryId=${libraryId}&libraryType=${libraryType}&libraryName=${libraryName}`
     })
     // console.log("结束跳转至复习入口函数")
+  },
+  goToItemDetail(e) {
+    const { id } = e.currentTarget.dataset;
+    wx.navigateTo({
+      url: `/pages/knowledge/detail/index?knowledgeId=${id}`
+    });
   }
 })

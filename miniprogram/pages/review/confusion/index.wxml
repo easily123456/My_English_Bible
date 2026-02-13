@@ -1,43 +1,38 @@
+<!-- pages/review/confusion/index.wxml -->
 <view class="container">
-  <!-- 混淆自测卡片 -->
-  <view class="confusion-card" wx:if="{{confusionList.length > 0}}">
-    <view class="title">混淆自测 - 写出下列英文的中文释义</view>
+  <!-- 顶部信息栏 -->
+  <view class="header">
+    <text class="library-name">{{libraryName}}</text>
+    <text class="item-count">共 {{confusionList.length}} 个易混词</text>
+  </view>
 
-    <!-- 混淆组列表 -->
+  <!-- 主体：滚动展示所有易混词+输入框 -->
+  <scroll-view class="confusion-scroll" scroll-y="true">
     <view class="confusion-list">
-      <view class="confusion-item" wx:for="{{confusionList}}" wx:key="en">
-        <view class="en-word">{{item.en}}</view>
+      <view class="confusion-item" wx:for="{{confusionList}}" wx:key="_id">
+        <!-- 英文词 -->
+        <view class="item-en">{{item.en}}</view>
+        <!-- 中文释义输入框 -->
         <input 
           class="answer-input"
           placeholder="请输入中文释义"
-          value="{{userAnswers[item.en] || ''}}"
-          data-en="{{item.en}}"
+          placeholder-class="placeholder-text"
           bindinput="inputAnswer"
+          data-id="{{item._id}}"
+          value="{{userAnswers[item._id] || ''}}"
         />
-        <!-- 正确答案（核对后显示） -->
-        <view class="correct-zh" wx:if="{{isCheck}}">
-          正确释义：{{item.zh}}
-        </view>
       </view>
     </view>
+  </scroll-view>
 
-    <!-- 操作按钮 -->
-    <view class="btn-group">
-      <button class="btn" bindtap="checkAllAnswer" wx:if="!isCheck">核对所有答案</button>
-      <button class="btn" bindtap="restartReview" wx:if="{{isCheck}}">重新自测</button>
-    </view>
-
-    <!-- 自测结果（核对后显示） -->
-    <view class="result-wrap" wx:if="{{isCheck}}">
-      <view class="result">
-        正确率：{{correctCount}}/{{totalCount}} ({{(correctCount/totalCount)*100 | number}}%)
-      </view>
-    </view>
-  </view>
-
-  <!-- 无数据提示 -->
-  <view class="empty-tip" wx:if="{{confusionList.length === 0 && !isLoading}}">
-    <text>暂无混淆自测内容</text>
-    <button class="back-btn" bindtap="goBack">返回知识库</button>
+  <!-- 底部固定提交按钮 -->
+  <view class="submit-wrap">
+    <button 
+      class="submit-btn" 
+      bindtap="submitAnswers"
+      disabled="{{isSubmitting}}"
+    >
+      {{isSubmitting ? '提交中...' : '提交答案'}}
+    </button>
   </view>
 </view>

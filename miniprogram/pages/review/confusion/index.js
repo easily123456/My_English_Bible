@@ -1,117 +1,164 @@
 // pages/review/confusion/index.js
 const db = wx.cloud.database();
+const _ = db.command;
+
 Page({
   data: {
     libraryId: '',
     libraryName: '',
-    confusionList: [],  // 混淆组（5个英文单词）
-    userAnswers: {},    // 用户答案：{单词1: 答案1, 单词2: 答案2...}
-    isCheck: false,     // 是否核对答案
-    correctCount: 0,    // 正确数量
-    totalCount: 0,      // 总数量
-    isLoading: true     // 加载状态
+    confusionList: [], // 打乱后的易混词列表
+    userAnswers: {},   // 记录用户答案 {itemId: answer}
+    isSubmitting: false // 提交状态锁
   },
 
   onLoad(options) {
     const { libraryId, libraryName } = options;
     this.setData({ libraryId, libraryName });
-    wx.setNavigationBarTitle({ title: `${libraryName} - 混淆自测` });
+    // 获取并处理易混词列表
     this.getConfusionList(libraryId);
   },
 
   /**
-   * 查询知识点并生成混淆组（适配新结构）
+   * 步骤1：获取混淆组合下的所有知识点并打乱顺序
    */
-  getConfusionList(libraryId) {
-    wx.showLoading({ title: '加载混淆题库...' });
-    db.collection('item_set_relations')
-      .where({ setId: libraryId, setType: 'library' })
-      .get()
-      .then(res => {
-        if (res.data.length === 0) {
-          wx.hideLoading();
-          this.setData({ isLoading: false });
-          wx.showToast({ title: '暂无混淆自测内容', icon: 'none' });
-          return;
-        }
-        const itemIds = res.data.map(item => item.itemId);
-        return db.collection('knowledge_items').where({
-          _id: db.command.in(itemIds)
-        }).get();
-      })
-      .then(res => {
+  async getConfusionList(libraryId) {
+    try {
+      wx.showLoading({ title: '加载中...' });
+
+      // 1. 查询关联表，获取该组合下的所有itemId
+      const relationRes = await db.collection('item_set_relations')
+        .where({
+          setId: libraryId,
+          setType: 'library'
+        })
+        .get();
+      const itemIds = relationRes.data.map(item => item.itemId);
+
+      if (itemIds.length === 0) {
         wx.hideLoading();
-        this.setData({ isLoading: false });
-        if (res) {
-          const itemList = res.data;
-          // 生成混淆组（取前5个，不足则取全部）
-          const confusionList = itemList.slice(0, 5).map(item => ({
-            en: item.en,
-            zh: item.zh // 正确中文释义（新结构）
-          }));
-          this.setData({
-            confusionList,
-            totalCount: confusionList.length,
-            userAnswers: {}
-          });
-        }
-      })
-      .catch(err => {
-        wx.hideLoading();
-        this.setData({ isLoading: false });
-        wx.showToast({ title: '加载题库失败', icon: 'none' });
-        console.error('加载题库失败：', err);
-      });
+        wx.showToast({ title: '暂无易混词', icon: 'none' });
+        wx.navigateBack();
+        return;
+      }
+
+      // 2. 查询知识点详情
+      const knowledgeRes = await db.collection('knowledge_items')
+        .where({ _id: _.in(itemIds) })
+        .get();
+
+      // 3. 打乱顺序（Fisher-Yates算法，与单点复习复用）
+      const shuffledList = this.shuffleArray(knowledgeRes.data);
+
+      this.setData({ confusionList: shuffledList });
+      wx.hideLoading();
+    } catch (err) {
+      wx.hideLoading();
+      wx.showToast({ title: '加载失败', icon: 'none' });
+      console.error('获取易混词失败：', err);
+    }
   },
 
   /**
-   * 输入单个单词的答案
+   * 辅助函数：数组打乱
+   */
+  shuffleArray(arr) {
+    const newArr = [...arr];
+    for (let i = newArr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+    }
+    return newArr;
+  },
+
+  /**
+   * 步骤2：记录用户输入的答案
    */
   inputAnswer(e) {
-    const { en } = e.currentTarget.dataset;
+    const { id } = e.currentTarget.dataset;
     const value = e.detail.value.trim();
     const { userAnswers } = this.data;
-    userAnswers[en] = value;
+    userAnswers[id] = value;
     this.setData({ userAnswers });
   },
 
   /**
-   * 核对所有答案
+   * 步骤3：提交答案（核心逻辑）
    */
-  checkAllAnswer() {
-    const { confusionList, userAnswers } = this.data;
-    let correctCount = 0;
+  async submitAnswers() {
+    const { confusionList, userAnswers, libraryId, libraryName } = this.data;
+    if (this.data.isSubmitting) return;
 
-    confusionList.forEach(item => {
-      const userAnswer = userAnswers[item.en] || '';
-      const normalize = (str) => str.toLowerCase().replace(/\s+/g, '');
-      if (normalize(userAnswer) === normalize(item.zh)) {
-        correctCount++;
-      }
-    });
+    // 验证：至少填写一个答案（可选，根据需求调整）
+    const hasAnswer = Object.values(userAnswers).some(v => v);
+    //Object.values(userAnswers)返回 userAnswers 对象的所有属性值组成的数组
+    //.some(v => v)对数组执行遍历，检查是否存在至少一个元素满足条件，等价于 v => Boolean(v) === true
+    if (!hasAnswer) {
+      wx.showToast({ title: '请至少填写一个答案', icon: 'none' });
+      return;
+    }
 
-    this.setData({
-      isCheck: true,
-      correctCount
-    });
+    this.setData({ isSubmitting: true });
+
+    try {
+      // 步骤1：组装报告数据（不判断对错，仅用于对照）
+      const reviewResult = {
+        libraryId,
+        libraryName,
+        totalCount: confusionList.length,
+        correctCount: 0, // 混淆组合不统计对错
+        errorCount: 0,
+        resultList: confusionList.map(item => ({
+          itemId: item._id,
+          question: item.en, // 英文词作为题目
+          userAnswer: userAnswers[item._id] || '',
+          correctAnswer: item.zh, // 第一个释义作为正确答案
+          isCorrect: null // 标记为null，报告页不标红/绿
+        }))
+      };
+
+      // 步骤2：更新每个单词的复习记录（reviewCount+1，lastReviewTime更新）
+      await this.updateReviewRecords(confusionList);
+
+      // 步骤3：跳转报告页
+      wx.navigateTo({
+        url: `/pages/review/report/index?result=${encodeURIComponent(JSON.stringify(reviewResult))}`
+      });
+
+    } catch (err) {
+      wx.showToast({ title: '提交失败', icon: 'none' });
+      console.error('提交答案失败：', err);
+    } finally {
+      this.setData({ isSubmitting: false });
+    }
   },
 
   /**
-   * 重新自测
+   * 步骤4：更新复习记录（T3-10）
    */
-  restartReview() {
-    this.getConfusionList(this.data.libraryId);
-    this.setData({
-      userAnswers: {},
-      isCheck: false,
-      correctCount: 0
-    });
-  },
+  async updateReviewRecords(confusionList) {
+    try {
+      const relationRes = await db.collection('item_set_relations')
+      .where({
+        setId: this.libraryId,
+        setType: 'library'
+      })
+      .get();
+      const updatePromises = relationRes.data.map(relation => 
+        db.collection('item_set_relations').doc(relation._id).update({
+          data: {
+            reviewCount: _.inc(1),
+            lastReviewTime: db.serverDate()
+          }
+        })
+      );
+      await Promise.all(updatePromises);
+      console.log("批量更新成功");
+    } catch (err) {
+      console.error("批量更新失败", err);
+    }
+    
 
-  /**
-   * 返回知识库详情页
-   */
-  goBack() {
-    wx.navigateBack();
+
+
   }
 });
