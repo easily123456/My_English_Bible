@@ -52,7 +52,7 @@ Page({
     // wx.navigateTo({
     //   url: `/pages/knowledge/create/index` // 跳转到创建知识点页面
     // });
-    wx.switchTab({
+    wx.navigateTo({
       url: '/pages/knowledge/create/index' // 仅当它是 tabBar 页面时
     });
     

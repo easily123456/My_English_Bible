@@ -40,19 +40,7 @@
         "text": "我的",                      
         "iconPath": "images/icons/me.png",     
         "selectedIconPath": "images/icons/me_active.png"  
-      },
-      {
-        "pagePath": "pages/knowledge/create/index",         
-        "text": "知识点创建",                      
-        "iconPath": "images/icons/me.png",     
-        "selectedIconPath": "images/icons/me_active.png"  
-      },
-      {
-        "pagePath": "pages/knowledge/list/index",         
-        "text": "知识点列表",                      
-        "iconPath": "images/icons/me.png",     
-        "selectedIconPath": "images/icons/me_active.png"  
-      }      
+      }    
     ]
   },
   "window": {  

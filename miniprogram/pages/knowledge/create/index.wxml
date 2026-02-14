@@ -45,19 +45,36 @@
     />
   </view>
 
-  <!-- 知识库归属（保留） -->
+  <!-- 知识库归属（改为单选） -->
   <view class="form-item">
-    <label class="form-label">归属知识库（可多选）</label>
-    <checkbox-group 
-      class="library-checkbox-group" 
-      bindchange="handleLibraryCheck" 
+    <label class="form-label">归属知识库</label>
+    <radio-group 
+      class="library-radio-group" 
+      bindchange="handleLibrarySelect" 
     >
-      <label class="checkbox-item" wx:for="{{libraryList}}" wx:key="_id">
-        <checkbox value="{{item._id}}" />
-        <text class="checkbox-text">{{item.name}}</text>
+      <label class="radio-item" wx:for="{{libraryList}}" wx:key="_id">
+        <radio value="{{item._id}}" checked="{{selectedLibraryId === item._id}}" />
+        <text class="radio-text">{{item.name}}</text>
       </label>
-    </checkbox-group>
+    </radio-group>
   </view>
+
+<!-- 二级小组选择（仅当选择第4-6个知识库时显示） -->
+<view class="form-item" wx:if="{{showGroupSelect}}">
+  <label class="form-label">选择小组</label>
+  <radio-group class="group-radio-group" bindchange="handleGroupSelect">
+    <view class="group-select-container">
+      <view class="group-list">
+        <label class="radio-item" wx:for="{{groupList}}" wx:key="_id">
+          <radio value="{{item._id}}" checked="{{selectedGroupId === item._id}}" />
+          <text class="radio-text">{{item.name}}</text>
+        </label>
+      </view>
+      <button class="create-group-btn" bindtap="showCreateGroupDialog">创建新小组</button>
+    </view>
+  </radio-group>
+</view>
+
 
   <!-- 提交按钮 -->
   <button 
