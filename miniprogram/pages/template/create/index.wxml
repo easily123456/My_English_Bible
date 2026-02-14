@@ -1,0 +1,74 @@
+<!-- pages/template/create/index.wxml -->
+<view class="container">
+  <!-- 表单区域 -->
+  <form bindsubmit="submitForm">
+    <!-- 模板名 -->
+    <view class="form-item">
+      <label class="form-label">模板名</label>
+      <input 
+        class="form-input"
+        name="title"
+        placeholder="请输入模板名称（如：四六级开头模板）"
+        placeholder-class="placeholder-text"
+        value="{{formData.title || ''}}"
+        bindinput="inputChange"
+        data-key="title"
+      />
+    </view>
+
+    <!-- 模板说明 -->
+    <view class="form-item">
+      <label class="form-label">模板说明</label>
+      <input 
+        class="form-input"
+        name="description"
+        placeholder="请输入模板说明（如：适用于观点类作文）"
+        placeholder-class="placeholder-text"
+        value="{{formData.description || ''}}"
+        bindinput="inputChange"
+        data-key="description"
+      />
+    </view>
+
+    <!-- 英文内容 -->
+    <view class="form-item">
+      <label class="form-label">英文内容</label>
+      <textarea 
+        class="form-textarea"
+        name="english"
+        placeholder="请输入英文模板内容（支持多行）"
+        placeholder-class="placeholder-text"
+        value="{{formData.english || ''}}"
+        bindinput="inputChange"
+        data-key="english"
+        auto-height
+      />
+    </view>
+
+    <!-- 中文翻译 -->
+    <view class="form-item">
+      <label class="form-label">中文翻译</label>
+      <textarea 
+        class="form-textarea"
+        name="chinese"
+        placeholder="请输入对应的中文翻译（支持多行）"
+        placeholder-class="placeholder-text"
+        value="{{formData.chinese || ''}}"
+        bindinput="inputChange"
+        data-key="chinese"
+        auto-height
+      />
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="submit-wrap">
+      <button 
+        class="submit-btn" 
+        form-type="submit"
+        disabled="{{isSubmitting}}"
+      >
+        {{isEdit ? '保存修改' : '创建模板'}}
+      </button>
+    </view>
+  </form>
+</view>

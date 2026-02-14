@@ -12,7 +12,10 @@
     "pages/review/collection/index",
     "pages/review/confusion/index",    
     "pages/review/report/index",
-    "pages/search/index"
+    "pages/search/index",
+    "pages/template/list/index",
+    "pages/template/create/index",
+    "pages/template/detail/index"
   ],
   "tabBar": {
     "color": "#666666",              

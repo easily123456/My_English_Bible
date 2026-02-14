@@ -1,0 +1,47 @@
+<!-- pages/template/detail/index.wxml -->
+<view class="container">
+  <!-- 右上角编辑按钮 -->
+  <view class="edit-btn-wrap">
+    <button class="edit-btn" bindtap="goToEdit" data-id="{{templateInfo._id}}">
+      编辑
+    </button>
+  </view>
+
+  <!-- 模板基础信息 -->
+  <view class="template-header" wx:if="{{templateInfo}}">
+    <view class="title">{{templateInfo.title}}</view>
+    <view class="desc">{{templateInfo.description}}</view>
+    <view class="create-time">创建时间：{{formatTime(templateInfo.createTime)}}</view>
+  </view>
+
+  <!-- 内容分隔线 -->
+  <view class="divider" wx:if="{{templateInfo}}">
+    <text>英文内容</text>
+  </view>
+
+  <!-- 英文内容区 -->
+  <view class="content-area en-area" wx:if="{{templateInfo}}">
+    <text class="content-text">{{templateInfo.english || '暂无英文内容'}}</text>
+  </view>
+
+  <!-- 内容分隔线 -->
+  <view class="divider" wx:if="{{templateInfo}}">
+    <text>中文翻译</text>
+  </view>
+
+  <!-- 中文内容区 -->
+  <view class="content-area zh-area" wx:if="{{templateInfo}}">
+    <text class="content-text">{{templateInfo.chinese || '暂无中文翻译'}}</text>
+  </view>
+
+  <!-- 加载中提示 -->
+  <view class="loading-tip" wx:if="{{isLoading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 空数据提示 -->
+  <view class="empty-tip" wx:if="{{!isLoading && !templateInfo}}">
+    <text>模板不存在或已删除</text>
+    <button class="back-btn" bindtap="goBack">返回列表</button>
+  </view>
+</view>

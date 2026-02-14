@@ -53,5 +53,11 @@ Page({
     wx.navigateTo({
       url: `/pages/library/detail/index?libraryId=${libraryId}&libraryName=${libraryName}`
     })
-  }
+  },
+    // 新增：跳转到作文模板列表页
+    goToEssayTemplateList() {
+      wx.navigateTo({
+        url: '/pages/template/list/index'
+      })
+    }
 })

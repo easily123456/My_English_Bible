@@ -1,0 +1,26 @@
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="page-title">作文模板</view>
+
+  <!-- 模板列表 -->
+  <view class="template-list">
+    <view
+      class="template-item"
+      wx:for="{{templateList}}"
+      wx:key="_id"
+      bindtap="goToDetail"
+      data-id="{{item._id}}"
+    >
+      <view class="template-name">{{item.title}}</view>
+      <view class="template-desc">{{item.description || '暂无说明'}}</view>
+      <view class="arrow-icon">→</view>
+    </view>
+  </view>
+
+  <!-- 空数据 -->
+  <view class="empty" >
+  <!-- wx:if="{{templateList.length === 0 && !loading}}" -->
+    <text>暂无作文模板</text>
+    <button class="create-btn" bindtap="goToCreate">去创建</button>
+  </view>
+</view>
