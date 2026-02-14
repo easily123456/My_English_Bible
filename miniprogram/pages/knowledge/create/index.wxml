@@ -3,15 +3,58 @@
   <!-- 页面标题 -->
   <view class="page-title">创建新知识点</view>
 
-  <!-- 英文输入 -->
-  <view class="form-item">
-    <label class="form-label">英文</label>
-    <input 
-      class="form-input" 
-      placeholder="请输入英文（如 apple）" 
-      bindinput="onEnInput"
-      value="{{enContent}}"
-    />
+  <!-- 英文输入区域，包含搜索结果 -->
+  <view class="search-input-wrapper" >
+  <!-- catchtap="handleSearchWrapperTap" -->
+
+    <view class="form-item">
+      <label class="form-label">英文</label>
+      <input 
+        class="form-input" 
+        placeholder="请输入英文（如 apple）" 
+        bindinput="onEnInput"
+        bindblur="handleInputBlur"
+        bindfocus="handleInputFocus"
+        value="{{enContent}}"
+      />
+      <!-- bindinput绑定输入事件，bindblur失去焦点触发的事件，bindfocus获取焦点触发的事件 -->
+    </view>
+
+    <!-- 搜索结果展示区域 -->
+    <view class="search-result-container" wx:if="{{showSearchResults}}">
+      <!-- 搜索结果列表 -->
+      <view class="result-list" wx:if="{{searchResultList.length > 0}}">
+        <!-- 循环渲染结果项 -->
+        <view 
+          class="result-item"
+          wx:for="{{searchResultList}}"
+          wx:key="_id"
+          bindtap="goToKnowledgeDetail"
+          data-id="{{item._id}}"
+        >
+          <!-- 英文词条（高亮关键字） -->
+          <view class="item-en">
+            <rich-text nodes="{{item.highlightEn}}"></rich-text>
+            <!-- rich-text为用于渲染包含 HTML 标签或富文本内容的字符串 -->
+            <!-- nodes 属性：接收一个字符串或数组，表示要渲染的富文本内容 -->
+            <!-- <span style="color:#1a7bff">${match}</span> -->
+          </view>
+
+          <!-- 中文释义和词性 -->
+          <view class="item-zh">{{item.pos}} {{item.zh}}</view>
+        </view>
+      </view>
+
+      <!-- 无结果提示 -->
+      <view class="empty-tip" wx:if="{{!isSearchLoading && searchResultList.length === 0 && enContent}}">
+        <text>未找到匹配的知识点</text>
+      </view>
+
+      <!-- 加载提示 -->
+      <view class="loading-tip" wx:if="{{isSearchLoading}}">
+        <text>搜索中...</text>
+      </view>
+    </view>
   </view>
 
   <!-- 简化：单组词性+释义（移除列表/添加/删除按钮） -->

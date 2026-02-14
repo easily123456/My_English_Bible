@@ -1,5 +1,6 @@
 // pages/knowledge/create.js
 const db = wx.cloud.database()
+const _ = db.command
 Page({
   data: {
     // 基础输入（简化为单字段）
@@ -12,7 +13,12 @@ Page({
     selectedLibraryId: '', // 选中的知识库ID
     showGroupSelect: false, // 是否显示小组选择
     groupList: [], // 小组列表
-    selectedGroupId: '' // 选中的小组ID
+    selectedGroupId: '', // 选中的小组ID
+    // 搜索相关
+    showSearchResults: false, // 是否显示搜索结果
+    searchResultList: [], // 搜索结果列表
+    isSearchLoading: false, // 搜索加载状态
+    searchTimer: null // 搜索防抖定时器
   },
 
   onLoad(options) {
@@ -40,11 +46,27 @@ Page({
       })
   },
 
-  // 英文输入绑定（不变）
+  // 英文输入绑定，添加搜索功能
   onEnInput(e) {
+    const enContent = e.detail.value
     this.setData({
-      enContent: e.detail.value
+      enContent: enContent,
+      showSearchResults: enContent.length > 0 // 输入内容时显示搜索结果
     })
+
+    // 关键字为空时清空结果
+    if (!enContent) {
+      this.setData({ searchResultList: [] })
+      return
+    }
+
+    // 触发搜索（防抖处理，避免频繁请求）
+    clearTimeout(this.data.searchTimer)
+    const searchTimer = setTimeout(() => {
+      this.searchKnowledge(enContent)
+    }, 300)
+    
+    this.setData({ searchTimer })
   },
 
   // 新增：单组词性输入绑定
@@ -177,6 +199,140 @@ Page({
         })
         console.error('创建小组失败：', err)
       })
+  },
+  
+  // 搜索知识点
+  searchKnowledge(keyword) {
+    this.setData({ isSearchLoading: true })
+
+    try {
+      // 从knowledge_items表中搜索相关知识点
+      db.collection('knowledge_items')
+        .where({
+          en: db.RegExp({
+            regexp: keyword,
+            options: 'i' // 忽略大小写
+          })
+        })
+        .get()
+        .then(knowledgeRes => {
+          // 去重处理
+          const uniqueItems = []
+          const itemIds = new Set()
+          
+          knowledgeRes.data.forEach(item => {
+            if (!itemIds.has(item._id)) {
+              itemIds.add(item._id)
+              uniqueItems.push(item)
+            }
+          })
+
+          // 获取每个知识点所属的知识库信息
+          if (uniqueItems.length > 0) {
+            this.getKnowledgeSources(uniqueItems, keyword)
+          } else {
+            this.setData({ 
+              searchResultList: [], 
+              isSearchLoading: false 
+            })
+          }
+        })
+        .catch(err => {
+          console.error('搜索知识点失败：', err)
+          this.setData({ 
+            searchResultList: [], 
+            isSearchLoading: false 
+          })
+        })
+    } catch (err) {
+      console.error('搜索出错：', err)
+      this.setData({ 
+        searchResultList: [], 
+        isSearchLoading: false 
+      })
+    }
+  },
+  
+  // 获取知识点所属的知识库信息
+  getKnowledgeSources(items, keyword) {
+    // 收集所有知识点ID
+    const itemIds = items.map(item => item._id)
+    
+    // 查询关联表，获取知识点与知识库的关联关系
+    db.collection('item_set_relations')
+      .where({ itemId: _.in(itemIds) })
+      .get()
+      .then(relationRes => {
+        // 查询所有知识库信息
+        db.collection('libraries')
+          .get()
+          .then(libraryRes => {
+            // 组装搜索结果
+            const searchResultList = items.map(item => {
+              // 匹配知识点所属的知识库（来源）
+              const relation = relationRes.data.find(rel => rel.itemId === item._id)
+              const library = libraryRes.data.find(lib => lib._id === relation?.setId)
+              
+              // 高亮关键字（替换为蓝色）
+              const highlightEn = item.en.replace(
+                new RegExp(keyword, 'gi'),
+                match => `<span style="color:#1a7bff">${match}</span>`
+              )
+              
+              return {
+                ...item,
+                highlightEn,
+                sourceName: library?.name || '未知来源'
+              }
+            })
+            
+            this.setData({ 
+              searchResultList, 
+              isSearchLoading: false 
+            })
+          })
+          .catch(err => {
+            console.error('获取知识库信息失败：', err)
+            this.setData({ 
+              searchResultList: [], 
+              isSearchLoading: false 
+            })
+          })
+      })
+      .catch(err => {
+        console.error('获取关联关系失败：', err)
+        this.setData({ 
+          searchResultList: [], 
+          isSearchLoading: false 
+        })
+      })
+  },
+  
+  // 处理搜索输入区域的点击事件，防止冒泡
+  handleSearchWrapperTap(e) {
+    // 阻止事件冒泡，防止点击搜索结果区域时触发其他事件
+    // e.stopPropagation()
+  },
+  
+  // 处理输入框失焦事件，隐藏搜索结果
+  handleInputBlur() {
+    // 失焦时隐藏搜索结果
+    this.setData({ showSearchResults: false })
+  },
+  
+  // 处理输入框聚焦事件，如果有内容则显示搜索结果
+  handleInputFocus() {
+    if (this.data.enContent.length > 0) {
+      this.setData({ showSearchResults: true })
+    }
+  },
+  
+  // 跳转至知识点详情页
+  goToKnowledgeDetail(e) {
+    const knowledgeId = e.currentTarget.dataset.id
+    wx.navigateTo({
+      url: `/pages/knowledge/detail/index?knowledgeId=${knowledgeId}`
+    })
   },
 
   // 提交逻辑（修改为单选逻辑）

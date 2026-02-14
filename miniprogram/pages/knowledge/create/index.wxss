@@ -151,3 +151,136 @@
   background-color: var(--color-text-placeholder);
   color: var(--color-white);
 }
+
+/* 搜索输入区域容器 */
+.search-input-wrapper {
+  position: relative;
+  margin-bottom: 30rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 搜索结果展示区域样式 */
+.search-result-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--color-white);
+  border: 1rpx solid var(--color-border);
+  border-radius: 8rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.1);
+  margin-top: 8rpx;
+  overflow: hidden;
+  max-height: 400rpx;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.result-list {
+  padding: 10rpx 0;
+}
+
+.result-item {
+  padding: 12rpx 20rpx;
+  border-bottom: 1rpx solid var(--color-border);
+  font-size: 26rpx;
+}
+
+.result-item:last-child {
+  border-bottom: none;
+}
+
+.item-en {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 8rpx;
+}
+
+.item-zh {
+  color: var(--color-text-secondary);
+  font-size: 26rpx;
+  line-height: 1.4;
+}
+
+/* 滚动条样式 */
+.search-result-container::-webkit-scrollbar {
+  width: 4rpx;
+}
+
+.search-result-container::-webkit-scrollbar-track {
+  background: var(--color-bg-gray);
+}
+
+.search-result-container::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 2rpx;
+}
+
+.search-result-container::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-tertiary);
+}
+
+/* 加载提示 */
+.loading-tip {
+  text-align: center;
+  padding: 20rpx;
+  color: var(--color-text-secondary);
+  font-size: 28rpx;
+}
+
+/* 无结果提示 */
+.empty-tip {
+  text-align: center;
+  padding: 40rpx;
+  color: var(--color-text-secondary);
+  font-size: 28rpx;
+}
+
+/* 单选框样式 */
+.library-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15rpx;
+  margin-top: 10rpx;
+}
+
+.radio-item {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  font-size: 28rpx;
+  color: var(--color-text-primary);
+}
+
+.radio-text {
+  flex: 1;
+}
+
+/* 小组选择样式 */
+.group-select-container {
+  margin-top: 15rpx;
+}
+
+.group-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15rpx;
+  margin-bottom: 20rpx;
+}
+
+.create-group-btn {
+  background-color: var(--color-primary-bg);
+  color: var(--color-primary);
+  border: 1rpx solid var(--color-primary);
+  border-radius: 8rpx;
+  padding: 12rpx;
+  font-size: 26rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.create-group-btn::after {
+  border: none;
+}
