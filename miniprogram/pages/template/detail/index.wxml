@@ -1,47 +1,50 @@
 <!-- pages/template/detail/index.wxml -->
 <view class="container">
-  <!-- 右上角编辑按钮 -->
-  <view class="edit-btn-wrap">
+  <!-- 顶部操作栏 - 左右分离布局 -->
+  <view class="header-bar">
+    <!-- 左侧返回按钮 -->
+    <button class="back-btn" bindtap="goBack">
+      <text class="back-icon">←</text>
+      <text class="back-text">返回</text>
+    </button>
+    <!-- 右侧编辑按钮 -->
     <button class="edit-btn" bindtap="goToEdit" data-id="{{templateInfo._id}}">
       编辑
     </button>
   </view>
 
-  <!-- 模板基础信息 -->
-  <view class="template-header" wx:if="{{templateInfo}}">
-    <view class="title">{{templateInfo.title}}</view>
-    <view class="desc">{{templateInfo.description}}</view>
-    <view class="create-time">创建时间：{{formatTime(templateInfo.createTime)}}</view>
+  <!-- 内容容器：统一基础信息和内容区的宽度 -->
+  <view class="content-wrap">
+    <!-- 模板基础信息卡片 -->
+    <view class="base-info-card" wx:if="{{templateInfo}}">
+      <view class="title">{{templateInfo.title}}</view>
+      <view class="desc" wx:if="{{templateInfo.description}}">描述：{{templateInfo.description}}</view>
+      <view class="meta-info">
+        <text class="create-time">创建时间：{{templateInfo.createTime}}</text>
+      </view>
+    </view>
+
+    <!-- 英文内容区 -->
+    <view class="content-card" wx:if="{{templateInfo}}">
+      <view class="content-label en-label">英文内容</view>
+      <view class="content-text en-text">{{templateInfo.english || '暂无英文内容'}}</view>
+    </view>
+
+    <!-- 中文翻译区 -->
+    <view class="content-card" wx:if="{{templateInfo}}">
+      <view class="content-label zh-label">中文翻译</view>
+      <view class="content-text zh-text">{{templateInfo.chinese || '暂无中文翻译'}}</view>
+    </view>
   </view>
 
-  <!-- 内容分隔线 -->
-  <view class="divider" wx:if="{{templateInfo}}">
-    <text>英文内容</text>
+  <!-- 加载中状态 -->
+  <view class="loading-state" wx:if="{{isLoading}}">
+    <text class="loading-text">加载中...</text>
   </view>
 
-  <!-- 英文内容区 -->
-  <view class="content-area en-area" wx:if="{{templateInfo}}">
-    <text class="content-text">{{templateInfo.english || '暂无英文内容'}}</text>
-  </view>
-
-  <!-- 内容分隔线 -->
-  <view class="divider" wx:if="{{templateInfo}}">
-    <text>中文翻译</text>
-  </view>
-
-  <!-- 中文内容区 -->
-  <view class="content-area zh-area" wx:if="{{templateInfo}}">
-    <text class="content-text">{{templateInfo.chinese || '暂无中文翻译'}}</text>
-  </view>
-
-  <!-- 加载中提示 -->
-  <view class="loading-tip" wx:if="{{isLoading}}">
-    <text>加载中...</text>
-  </view>
-
-  <!-- 空数据提示 -->
-  <view class="empty-tip" wx:if="{{!isLoading && !templateInfo}}">
-    <text>模板不存在或已删除</text>
-    <button class="back-btn" bindtap="goBack">返回列表</button>
+  <!-- 空数据/加载失败状态 -->
+  <view class="empty-state" wx:if="{{!isLoading && !templateInfo}}">
+    <text class="empty-text">模板不存在或已删除</text>
+    <button class="empty-back-btn" bindtap="goBack">返回模板列表</button>
   </view>
 </view>

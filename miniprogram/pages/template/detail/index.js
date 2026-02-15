@@ -18,6 +18,7 @@ Page({
     this.setData({ templateId: id });
     // 获取模板详情
     this.getTemplateDetail();
+
   },
 
   /**
@@ -42,6 +43,9 @@ Page({
         templateInfo: res.data,
         isLoading: false
       });
+      // console.log("createTime 类型:", typeof res.data.createTime, res.data.createTime);
+
+      // console.log(this.data.templateInfo.createTime);
       wx.hideLoading();
       callback && callback();
     } catch (err) {
@@ -53,17 +57,6 @@ Page({
     }
   },
 
-  /**
-   * 格式化时间（复用列表页逻辑）
-   */
-  formatTime(time) {
-    if (!time) return '未知时间';
-    const date = new Date(time);
-    return `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
-    // date.getFullYear()：获取四位数的年份（例如：2023）。
-    // (date.getMonth()+1).toString().padStart(2, '0')：获取月份（0-11），需要加1并转换为字符串，不足两位时补0（例如：01-12）。
-    // date.getDate().toString().padStart(2, '0')：获取日期（1-31），转换为字符串，不足两位时补0（例如：01-31）。
-  },
 
   /**
    * 跳转编辑页（携带模板ID）

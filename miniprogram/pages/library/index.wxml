@@ -24,7 +24,7 @@
 
         <!-- 新增：固定作文模板卡片（始终显示在最后） -->
         <view class="library-item" bindtap="goToEssayTemplateList">
-      <view class="library-name">📝 作文模板</view>
+      <view class="library-name">作文模板</view>
       <view class="library-desc">独立作文模板库，支持双语对照</view>
       <view class="arrow-icon">→</view>
     </view>

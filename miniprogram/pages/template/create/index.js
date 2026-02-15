@@ -58,12 +58,15 @@ Page({
    */
   inputChange(e) {
     const { key } = e.currentTarget.dataset;
-    const value = e.detail.value.trim();
+    const value = e.detail.value;
     const { formData } = this.data;
     formData[key] = value;
     this.setData({ formData });
   },
 
+
+
+  
   /**
    * 提交表单（创建/编辑通用）
    */
@@ -82,6 +85,13 @@ Page({
     }
 
     this.setData({ isSubmitting: true });
+
+    const formatDate = (date) => {
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
 
     try {
       if (isEdit) {
@@ -104,7 +114,7 @@ Page({
             description: formData.description,
             english: formData.english,
             chinese: formData.chinese,
-            createTime: db.serverDate() // 新增创建时间
+            createTime: formatDate(new Date()) // 新增创建时间
           }
         });
         wx.showToast({ title: '创建成功', icon: 'success' });

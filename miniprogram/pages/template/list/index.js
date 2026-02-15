@@ -10,6 +10,11 @@ Page({
     this.getList()
   },
 
+  onShow() {
+    // 页面显示时主动刷新数据，确保最新创建的模板信息能够立即显示
+    this.getList()
+  },
+
   onPullDownRefresh() {
     this.getList(() => {
       wx.stopPullDownRefresh()

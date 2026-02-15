@@ -1,72 +1,130 @@
 .container {
-  padding: 30rpx 20rpx;
+  padding: 0;
   background-color: var(--color-bg-gray);
   min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
 }
 
-.page-title {
-  font-size: 36rpx;
-  font-weight: bold;
-  color: var(--color-text-primary);
-  margin-bottom: 40rpx;
-  text-align: center;
-}
-
-.template-list {
+/* 顶部导航栏：左-中-右布局 */
+.header {
+  background-color: var(--color-white);
+  padding: 15rpx 20rpx;
   display: flex;
-  flex-direction: column;
-  gap: 20rpx;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1rpx solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.template-item {
-  background-color: var(--color-primary-bg);
-  padding: 30rpx;
-  border-radius: 10rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
-  display: flex;
-  flex-direction: column;
-  gap: 10rpx;
-  position: relative;
+/* 标题栏按钮通用样式 */
+.header-btn {
+  height: 60rpx;
+  line-height: 60rpx;
+  padding: 0 20rpx;
+  border-radius: 8rpx;
+  font-size: 28rpx;
 }
 
-.template-item:active {
+/* 占位元素，保持标题居中 */
+.header-btn.placeholder {
+  visibility: hidden;
+}
+
+/* 在本库创建按钮（右） */
+.create-btn {
+  color: var(--color-primary);
+}
+
+.create-btn:active {
   background-color: var(--color-primary-light);
 }
 
-.template-name {
+/* 页面标题（居中） */
+.library-title {
   font-size: 32rpx;
+  font-weight: bold;
   color: var(--color-text-primary);
+  flex: 1;
+  text-align: center;
+  margin: 0 10rpx;
+}
+
+/* 模板列表 */
+.item-list {
+  padding: 15rpx 20rpx;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.item-card {
+  background-color: var(--color-white);
+  padding: 30rpx;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 10rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
+  margin: 0;
+  cursor: pointer;
+}
+
+.item-en {
+  font-size: 32rpx;
+  color: var(--color-primary);
   font-weight: 600;
+  margin-bottom: 15rpx;
 }
 
-.template-desc {
-  font-size: 26rpx;
-  color: var(--color-text-secondary);
-  line-height: 1.4;
-}
-
-.arrow-icon {
-  position: absolute;
-  right: 30rpx;
-  top: 50%;
-  transform: translateY(-50%);
+.pos-zh-item {
   font-size: 28rpx;
-  color: var(--color-text-placeholder);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  margin-bottom: 5rpx;
 }
 
-.empty {
+.zh {
+  color: var(--color-text-primary);
+}
+
+/* 空数据提示 */
+.empty-tip {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20rpx;
-  margin-top: 100rpx;
+  justify-content: center;
+  height: 60vh;
+  gap: 30rpx;
+}
+
+.empty-tip text {
+  font-size: 28rpx;
   color: var(--color-text-placeholder);
 }
 
-.create-btn {
+/* 空数据时的创建按钮（全屏宽度） */
+.full-width {
+  width: 80%;
+  height: 80rpx;
+  line-height: 80rpx;
   background-color: var(--color-primary);
-  color: #fff;
-  border-radius: 10rpx;
-  padding: 15rpx 30rpx;
+  color: var(--color-white);
   font-size: 28rpx;
+  border-radius: 40rpx;
+}
+
+.full-width::after {
+  border: none;
+}
+
+.create-btn::after {
+  border: none;
 }
