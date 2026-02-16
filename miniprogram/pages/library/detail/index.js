@@ -5,7 +5,9 @@ Page({
     libraryId: '',    // 当前知识库ID
     libraryName: '',  // 当前知识库名称
     libraryType: '',  // 知识库类型
-    itemList: []      // 当前知识库下的知识点列表
+    itemList: [],     // 当前知识库下的知识点列表
+    groupList: [],    // 小组列表
+    libraryIndex: -1  // 知识库索引，用于判断是否为第4-6个知识库
   },
 
   // 页面加载时获取参数+查询知识点
@@ -15,6 +17,10 @@ Page({
     this.getLibraryDetail(libraryId)
     // 查询当前知识库下的所有知识点
     this.getLibraryItems(libraryId)
+    // 获取知识库列表以确定当前知识库的索引
+    this.getLibraryIndex(libraryId)
+
+
   },
 
   // 下拉刷新重新加载
@@ -105,6 +111,51 @@ Page({
         this.setData({ libraryType: 'single' }) // 兜底
       })
   },
+  
+  // 获取知识库列表以确定当前知识库的索引
+  getLibraryIndex(libraryId) {
+    db.collection('libraries')
+      .get()
+      .then(res => {
+        const libraryList = res.data
+        const libraryIndex = libraryList.findIndex(item => item._id === libraryId)
+        this.setData({ libraryIndex })
+        
+        // 如果是第4-6个知识库（索引3-5），则查询对应的小组列表
+        if (libraryIndex >= 3 && libraryIndex <= 5) {
+          this.getGroupsByLibrary(libraryId)
+        }
+      })
+      .catch(err => {
+        console.error('获取知识库列表失败：', err)
+      });
+      console.log(this.data);
+  },
+  
+  // 根据知识库ID获取小组列表
+  getGroupsByLibrary(libraryId) {
+    db.collection('groups')
+      .where({ libraryId })
+      .get()
+      .then(res => {
+        // 去重处理，确保groupname不重复
+        const uniqueGroups = []
+        const groupNames = new Set()
+        
+        res.data.forEach(group => {
+          if (!groupNames.has(group.name)) {
+            groupNames.add(group.name)
+            uniqueGroups.push(group)
+          }
+        })
+        
+        this.setData({ groupList: uniqueGroups })
+      })
+      .catch(err => {
+        console.error('获取小组列表失败：', err)
+        this.setData({ groupList: [] })
+      })
+  },
 
   // 跳转到复习入口页
   startReview(e) {
@@ -119,6 +170,14 @@ Page({
     const { id } = e.currentTarget.dataset;
     wx.navigateTo({
       url: `/pages/knowledge/detail/index?knowledgeId=${id}`
+    });
+  },
+  
+  // 跳转到小组详情页
+  goToGroupDetail(e) {
+    const { groupId, groupName, libraryId } = e.currentTarget.dataset;
+    wx.navigateTo({
+      url: `/pages/library/group/detail/index?groupId=${groupId}&groupName=${groupName}&libraryId=${libraryId}`
     });
   }
 })

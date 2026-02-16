@@ -22,7 +22,12 @@ Page({
   },
 
   onLoad(options) {
-    this.getLibraryList()
+    const {libraryId, groupId} = options;
+    this.setData({
+      selectedLibraryId: libraryId,
+      selectedGroupId: groupId || ''
+    });
+    this.getLibraryList();
   },
 
   // 获取知识库列表（不变）
@@ -35,6 +40,19 @@ Page({
         this.setData({
           libraryList: res.data
         })
+        
+        // 检查当前选中的知识库是否为第4-6号知识库，如果是则显示小组选项
+        const { selectedLibraryId, selectedGroupId } = this.data
+        if (selectedLibraryId) {
+          const selectedLibrary = res.data.find(item => item._id === selectedLibraryId)
+          if (selectedLibrary) {
+            const libraryIndex = res.data.indexOf(selectedLibrary)
+            if (libraryIndex >= 3 && libraryIndex <= 5) { // 第4-6个知识库（索引3-5）
+              this.setData({ showGroupSelect: true })
+              this.getGroupsByLibrary(selectedLibraryId, selectedGroupId)
+            }
+          }
+        }
       })
       .catch(err => {
         wx.hideLoading()
@@ -112,7 +130,7 @@ Page({
   },
   
   // 根据知识库获取小组列表
-  getGroupsByLibrary(libraryId) {
+  getGroupsByLibrary(libraryId, selectedGroupId) {
     // 从真实的group数据表中获取小组列表，确保groupname不重复
     db.collection('groups')
       .where({ libraryId })
@@ -130,7 +148,11 @@ Page({
         })
         //groupNames作为集合只是用来去重
 
-        this.setData({ groupList: uniqueGroups })
+        this.setData({ 
+          groupList: uniqueGroups,
+          // 如果传递了selectedGroupId，则保持选中状态
+          selectedGroupId: selectedGroupId || ''
+        })
       })
       .catch(err => {
         console.error('获取小组列表失败：', err)

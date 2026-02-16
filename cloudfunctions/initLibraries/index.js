@@ -48,12 +48,7 @@ exports.main = async (event, context) => {
         name: "易混淆词汇",
         libraryType: "confusion", // 混淆自测类型（无reviewType）
         description: "易混淆英语词组，采用混淆自测模式"
-      },
-      {
-        name: "作文模板",
-        libraryType: "display",
-        description: "常用作文模板"
-      },
+      }
     ]
 
     // 步骤2：批量插入数据到libraries集合

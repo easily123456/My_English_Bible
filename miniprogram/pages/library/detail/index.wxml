@@ -3,14 +3,12 @@
   <!-- 顶部导航栏：左（开始复习）- 中（标题）- 右（创建） -->
   <view class="header">
     <!-- 开始复习按钮（仅非view类型显示） -->
-    <button 
-      class="review-btn header-btn" 
+    <button class="review-btn header-btn" 
       bindtap="startReview"
       data-library-id="{{libraryId}}"
       data-library-type="{{libraryType}}"
       data-library-name="{{libraryName}}"
-      wx:if="{{libraryType !== 'view'}}"
-    >
+      wx:if="{{libraryType !== 'view'}}">
       开始复习
     </button>
     
@@ -23,9 +21,36 @@
     </button>
   </view>
 
-  <!-- 知识点列表 -->
-  <view class="item-list" wx:if="{{itemList.length > 0}}">
-    <view class="item-card" wx:for="{{itemList}}" wx:key="_id" bindtap="goToItemDetail" data-id="{{item._id}}">
+  <!-- 内容区域 -->
+  <!-- 条件判断逻辑：根据知识库类型和状态显示不同内容 -->
+  
+  <!-- 场景1：第4-6个知识库（索引3-5）且有小组 -->
+  <view class="item-list" wx:if="{{libraryIndex >= 3 && libraryIndex <= 5 && groupList.length > 0}}">
+    <view class="section-title">小组列表</view>
+    <view class="group-card" wx:for="{{groupList}}" wx:key="_id" 
+      bindtap="goToGroupDetail" 
+      data-group-id="{{item._id}}" 
+      data-group-name="{{item.name}}" 
+      data-library-id="{{libraryId}}">
+      <view class="group-name">{{item.name}}</view>
+      <view class="group-info">
+        <text class="info-text">查看详情</text>
+        <text class="arrow">›</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 场景2：第4-6个知识库（索引3-5）但无小组 -->
+  <view class="empty-group-tip" wx:elif="{{libraryIndex >= 3 && libraryIndex <= 5 && groupList.length === 0}}">
+    <text>该知识库暂无小组，快去创建知识点并选择小组吧～</text>
+    <button class="create-btn full-width" bindtap="goToCreate">创建知识点</button>
+  </view>
+  
+  <!-- 场景3：第1-3个知识库（索引0-2）且有知识点 -->
+  <view class="item-list" wx:elif="{{libraryIndex >= 0 && libraryIndex <= 2 && itemList.length > 0}}">
+    <view class="item-card" wx:for="{{itemList}}" wx:key="_id" 
+      bindtap="goToItemDetail" 
+      data-id="{{item._id}}">
       <!-- 英文 -->
       <view class="item-en">{{item.en}}</view>
       
@@ -42,7 +67,7 @@
     </view>
   </view>
   
-  <!-- 空数据提示 -->
+  <!-- 场景4：其他情况（无知识点） -->
   <view class="empty-tip" wx:else>
     <text>该知识库暂无知识点，快去创建吧～</text>
     <button class="create-btn full-width" bindtap="goToCreate">创建知识点</button>

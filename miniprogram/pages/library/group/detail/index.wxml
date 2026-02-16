@@ -1,0 +1,44 @@
+<!-- pages/library/group/detail/index.wxml -->
+<view class="container">
+  <!-- 顶部导航栏 -->
+  <view class="header">
+    <!-- 返回按钮 -->
+    <button class="back-btn header-btn" bindtap="goBack">
+      <text class="back-icon">‹</text>
+      <text>返回</text>
+    </button>
+    
+    <!-- 小组标题（居中） -->
+    <view class="group-title">{{groupName}}</view>
+    
+    <!-- 在本小组创建按钮 -->
+    <button class="create-btn header-btn" bindtap="goToCreate">
+      创建
+    </button>
+  </view>
+
+  <!-- 知识点列表 -->
+  <view class="item-list" wx:if="{{itemList.length > 0}}">
+    <view class="item-card" wx:for="{{itemList}}" wx:key="_id" bindtap="goToItemDetail" data-id="{{item._id}}">
+      <!-- 英文 -->
+      <view class="item-en">{{item.en}}</view>
+      
+      <!-- 词性-释义 -->
+      <view class="pos-zh-item">
+        <text class="pos">{{item.pos}}</text>
+        <text class="zh"> {{item.zh}}</text>
+      </view>
+      
+      <!-- 例句（有则显示） -->
+      <view class="item-example" wx:if="{{item.example}}">
+        例句：{{item.example}}
+      </view>
+    </view>
+  </view>
+  
+  <!-- 空数据提示 -->
+  <view class="empty-tip" wx:else>
+    <text>该小组暂无知识点，快去创建吧～</text>
+    <button class="create-btn full-width" bindtap="goToCreate">创建知识点</button>
+  </view>
+</view>

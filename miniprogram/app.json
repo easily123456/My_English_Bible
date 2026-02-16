@@ -2,11 +2,12 @@
   "pages": [
     "pages/index/index",
     "pages/library/index",
+    "pages/library/detail/index",
+    "pages/library/group/detail/index",
     "pages/me/index",
     "pages/knowledge/create/index",
     "pages/knowledge/list/index",
     "pages/knowledge/detail/index",
-    "pages/library/detail/index",
     "pages/review/start/index",
     "pages/review/single/index",
     "pages/review/collection/index",

@@ -1,0 +1,144 @@
+/* pages/library/group/detail/index.wxss */
+.container {
+  padding: 0;
+  background-color: var(--color-bg-gray);
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/* 顶部导航栏 */
+.header {
+  background-color: var(--color-white);
+  padding: 15rpx 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1rpx solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 标题栏按钮通用样式 */
+.header-btn {
+  height: 60rpx;
+  line-height: 60rpx;
+  padding: 0 20rpx;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+}
+
+/* 返回按钮 */
+.back-btn {
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 5rpx;
+}
+
+.back-icon {
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+/* 创建按钮 */
+.create-btn {
+  color: var(--color-primary);
+}
+
+.create-btn:active {
+  background-color: var(--color-primary-light);
+}
+
+/* 小组标题（居中） */
+.group-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--color-text-primary);
+  flex: 1;
+  text-align: center;
+  margin: 0 10rpx;
+}
+
+/* 知识点列表 */
+.item-list {
+  padding: 15rpx 20rpx;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.item-card {
+  background-color: var(--color-white);
+  padding: 30rpx;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 10rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
+  margin: 0;
+  cursor: pointer;
+}
+
+.item-en {
+  font-size: 32rpx;
+  color: var(--color-primary);
+  font-weight: 600;
+  margin-bottom: 15rpx;
+}
+
+.pos-zh-item {
+  font-size: 28rpx;
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  margin-bottom: 5rpx;
+}
+
+.pos {
+  color: var(--color-warning);
+  font-weight: 600;
+}
+
+.zh {
+  color: var(--color-text-primary);
+}
+
+.item-example {
+  font-size: 26rpx;
+  color: var(--color-text-secondary);
+  font-style: italic;
+  padding-top: 10rpx;
+  border-top: 1rpx dashed var(--color-border);
+}
+
+/* 空数据提示 */
+.empty-tip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  gap: 30rpx;
+}
+
+.empty-tip text {
+  font-size: 28rpx;
+  color: var(--color-text-placeholder);
+}
+
+/* 空数据时的创建按钮（全屏宽度） */
+.full-width {
+  width: 80%;
+  height: 80rpx;
+  line-height: 80rpx;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-size: 28rpx;
+  border-radius: 40rpx;
+}
