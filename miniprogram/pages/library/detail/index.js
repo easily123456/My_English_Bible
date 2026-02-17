@@ -129,7 +129,7 @@ Page({
       .catch(err => {
         console.error('获取知识库列表失败：', err)
       });
-      console.log(this.data);
+      // console.log(this.data);
   },
   
   // 根据知识库ID获取小组列表

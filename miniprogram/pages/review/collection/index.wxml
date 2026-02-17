@@ -1,35 +1,55 @@
 <view class="container">
-  <!-- 自测卡片 -->
-  <view class="collection-card" wx:if="{{currentQuestion}}">
-    <view class="question-title">自由默写</view>
-    <view class="question-content">{{currentQuestion}}</view>
-
-    <textarea 
-      class="answer-textarea"
-      placeholder="请输入你的答案"
-      value="{{userAnswer}}"
-      bindinput="inputAnswer"
-    ></textarea>
-
-    <view class="btn-group">
-      <button class="btn" bindtap="checkAnswer">核对答案</button>
-      <button class="btn" bindtap="nextQuestion">下一题</button>
+  <!-- 复习卡片 -->
+  <view class="review-card" wx:if="{{itemList.length > 0}}">
+    <!-- 答题区域标题：小组名称 -->
+    <view class="question">
+      <!-- <text>小组名称：</text> -->
+      <text class="zh-text">{{groupName || '功能句型'}}</text>
     </view>
 
-    <!-- 答案核对结果 -->
-    <view class="result-wrap" wx:if="{{isCheck}}">
-      <view class="result {{isCorrect ? 'correct' : 'error'}}">
-        {{isCorrect ? '回答正确 ✔️' : '回答错误 ❌'}}
+    <!-- 答题块形式组织 -->
+    <view class="answer-block" wx:for="{{itemList}}" wx:key="_id" wx:for-index="index">
+      <!-- 中文内容（带序列号） -->
+      <view class="zh-content">
+        <span class="serial-number">{{index + 1}}.</span>
+        {{item.zh}}
       </view>
-      <view class="correct-answer" wx:if="!isCorrect">
-        正确答案：{{currentAnswer}}
+      
+      <!-- 输入框 -->
+      <textarea 
+        class="answer-textarea"
+        placeholder="请输入对应的英文"
+        value="{{userAnswers[item._id] || ''}}"
+        bindinput="inputAnswer"
+        data-item-id="{{item._id}}"
+        auto-height
+      ></textarea>
+      
+      <!-- 英文内容（点击按钮后显示） -->
+      <view class="en-content" wx:if="{{showAnswers[item._id]}}">
+        {{item.en}}
       </view>
     </view>
+
+    <!-- 核心操作按钮：默写已完成 -->
+    <button 
+      class="complete-btn" 
+      bindtap="completeReview"
+      loading="{{isSubmitting}}"
+    >
+      默写已完成
+    </button>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-tip" wx:if="{{isLoading && itemList.length === 0}}">
+    <view class="loading-spinner"></view>
+    <text>正在生成复习题库...</text>
   </view>
 
   <!-- 无数据提示 -->
-  <view class="empty-tip" wx:if="{{!currentQuestion && !isLoading}}">
-    <text>暂无自测内容</text>
+  <view class="empty-tip" wx:if="{{!isLoading && itemList.length === 0}}">
+    <text>暂无复习内容</text>
     <button class="back-btn" bindtap="goBack">返回知识库</button>
   </view>
 </view>

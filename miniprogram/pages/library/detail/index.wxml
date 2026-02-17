@@ -2,15 +2,18 @@
 <view class="container">
   <!-- 顶部导航栏：左（开始复习）- 中（标题）- 右（创建） -->
   <view class="header">
-    <!-- 开始复习按钮（仅非view类型显示） -->
-    <button class="review-btn header-btn" 
-      bindtap="startReview"
-      data-library-id="{{libraryId}}"
-      data-library-type="{{libraryType}}"
-      data-library-name="{{libraryName}}"
-      wx:if="{{libraryType !== 'view'}}">
-      开始复习
-    </button>
+    <!-- 左侧区域：开始复习按钮或占位符 -->
+    <view class="header-left">
+      <button class="review-btn header-btn" 
+        bindtap="startReview"
+        data-library-id="{{libraryId}}"
+        data-library-type="{{libraryType}}"
+        data-library-name="{{libraryName}}"
+        wx:if="{{libraryIndex >= 0 && libraryIndex <= 2}}">
+        开始复习
+      </button>
+      <view class="header-left-placeholder" wx:else></view>
+    </view>
     
     <!-- 知识库标题（居中） -->
     <view class="library-title">{{libraryName}}</view>

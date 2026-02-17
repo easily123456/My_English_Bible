@@ -2,10 +2,9 @@
 <view class="container">
   <!-- 顶部导航栏 -->
   <view class="header">
-    <!-- 返回按钮 -->
-    <button class="back-btn header-btn" bindtap="goBack">
-      <text class="back-icon">‹</text>
-      <text>返回</text>
+    <!-- 开始复习按钮 -->
+    <button class="review-btn header-btn" bindtap="startReview">
+      开始复习
     </button>
     
     <!-- 小组标题（居中） -->

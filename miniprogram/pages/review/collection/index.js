@@ -4,30 +4,39 @@ Page({
   data: {
     libraryId: '',
     libraryName: '',
+    groupId: '',
+    groupName: '',
     itemList: [],       // 所有知识点
-    currentQuestion: '',// 当前题目（随机抽取的英文/中文）
-    currentAnswer: '',  // 正确答案
-    userAnswer: '',     // 用户输入的答案
-    isCheck: false,     // 是否已核对答案
-    isCorrect: false,   // 答案是否正确
+    userAnswers: {},    // 用户输入的答案 {itemId: answer}
+    showAnswers: {},    // 控制英文内容显示 {itemId: boolean}
+    isSubmitting: false, // 提交状态锁
     isLoading: true     // 加载状态
   },
 
   onLoad(options) {
-    const { libraryId, libraryName } = options;
-    this.setData({ libraryId, libraryName });
-    wx.setNavigationBarTitle({ title: `${libraryName} - 集合自测` });
-    this.getReviewItems(libraryId);
+    const { libraryId, libraryName, groupId, groupName } = options;
+    this.setData({ 
+      libraryId, 
+      libraryName, 
+      groupId, 
+      groupName 
+    });
+    wx.setNavigationBarTitle({ title: `${groupName || libraryName} - 集合自测` });
+    this.getReviewItems(libraryId, groupId);
   },
 
   /**
    * 查询知识点（适配新结构）
    */
-  getReviewItems(libraryId) {
+  getReviewItems(libraryId, groupId) {
     wx.showLoading({ title: '加载自测题库...' });
-    db.collection('item_set_relations')
-      .where({ setId: libraryId, setType: 'library' })
-      .get()
+    
+    // 根据是否有groupId决定查询条件
+    const query = groupId 
+      ? db.collection('item_set_relations').where({ groupId })
+      : db.collection('item_set_relations').where({ setId: libraryId, setType: 'library' });
+    
+    query.get()
       .then(res => {
         if (res.data.length === 0) {
           wx.hideLoading();
@@ -46,8 +55,6 @@ Page({
         if (res) {
           const itemList = res.data;
           this.setData({ itemList });
-          // 随机生成第一道题
-          this.generateQuestion();
         }
       })
       .catch(err => {
@@ -59,57 +66,44 @@ Page({
   },
 
   /**
-   * 随机生成题目（自由默写）
-   */
-  generateQuestion() {
-    const { itemList } = this.data;
-    if (itemList.length === 0) return;
-
-    // 随机选一个知识点
-    const randomItem = itemList[Math.floor(Math.random() * itemList.length)];
-    // 随机决定题目类型（英译中/中译英）
-    const isEn2Zh = Math.random() > 0.5;
-    
-    this.setData({
-      currentQuestion: isEn2Zh ? randomItem.en : randomItem.zh,
-      currentAnswer: isEn2Zh ? randomItem.zh : randomItem.en,
-      userAnswer: '',
-      isCheck: false,
-      isCorrect: false
-    });
-  },
-
-  /**
    * 输入答案
    */
   inputAnswer(e) {
-    this.setData({ userAnswer: e.detail.value.trim() });
-  },
-
-  /**
-   * 核对答案（忽略大小写/空格）
-   */
-  checkAnswer() {
-    const { userAnswer, currentAnswer } = this.data;
-    if (!userAnswer) {
-      wx.showToast({ title: '请先输入答案', icon: 'none' });
-      return;
-    }
-
-    const normalize = (str) => str.toLowerCase().replace(/\s+/g, '');
-    const isCorrect = normalize(userAnswer) === normalize(currentAnswer);
+    const { itemId } = e.currentTarget.dataset;
+    const value = e.detail.value;
     
-    this.setData({
-      isCheck: true,
-      isCorrect
-    });
+    // 更新userAnswers对象
+    const { userAnswers } = this.data;
+    userAnswers[itemId] = value;
+    this.setData({ userAnswers });
   },
 
   /**
-   * 下一题
+   * 默写已完成按钮点击事件
    */
-  nextQuestion() {
-    this.generateQuestion();
+  completeReview() {
+    this.setData({ isSubmitting: true });
+    
+    try {
+      // 构建showAnswers对象，所有知识点都显示英文内容
+      const { itemList } = this.data;
+      const showAnswers = {};
+      
+      itemList.forEach(item => {
+        showAnswers[item._id] = true;
+      });
+      
+      // 更新数据，显示所有英文内容
+      this.setData({ showAnswers });
+    } catch (err) {
+      wx.showToast({ title: '操作失败', icon: 'none' });
+      console.error('操作失败：', err);
+    } finally {
+      // 延迟设置isSubmitting为false，防止连续点击
+      setTimeout(() => {
+        this.setData({ isSubmitting: false });
+      }, 300);
+    }
   },
 
   /**

@@ -362,7 +362,7 @@ Page({
     const { enContent, posContent, zhContent, exampleContent, selectedLibraryId, selectedGroupId, showGroupSelect } = this.data
     
     // 步骤1：校验
-    if (!enContent || !posContent || !zhContent || !selectedLibraryId) {
+    if (!enContent  || !zhContent || !selectedLibraryId) {
       wx.showToast({
         title: '请填写英文、词性、释义并选择知识库',
         icon: 'none'

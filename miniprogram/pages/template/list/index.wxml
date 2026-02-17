@@ -1,8 +1,10 @@
 <view class="container">
-  <!-- 顶部导航栏：中（标题）- 右（创建） -->
+  <!-- 顶部导航栏：左-中-右布局 -->
   <view class="header">
-    <!-- 占位元素，保持标题居中 -->
-    <view class="header-btn placeholder"></view>
+    <!-- 左侧区域：占位符 -->
+    <view class="header-left">
+      <view class="header-left-placeholder"></view>
+    </view>
     
     <!-- 页面标题（居中） -->
     <view class="library-title">作文模板</view>

@@ -68,45 +68,17 @@ Page({
   },
 
   /**
-   * 核心功能：保存错题ID到缓存（支持错题再练）
-   */
-  saveErrorItems() {
-    const { resultList, libraryId } = this.data;
-    // 筛选错误的知识点ID
-    const errorItemIds = resultList
-      .filter(item => !item.isCorrect)
-      .map(item => item.itemId);
-
-    if (errorItemIds.length === 0) {
-      wx.showToast({ title: '暂无错题', icon: 'none' });
-      return;
-    }
-
-    // 方案1：保存到本地缓存（有效期持久）
-    // wx.setStorageSync(`error_items_${libraryId}`, errorItemIds);
-
-    // 方案2：保存到全局状态（可选，需在app.js配置）
-    const app = getApp();     //获取app的实例
-    if (app.globalData) {       
-      app.globalData.errorItemIds = {     //直接赋值
-        ...app.globalData.errorItemIds,
-        [libraryId]: errorItemIds
-      };
-      //展开后，增设赋值libraryId再直接赋值
-    }
-
-    wx.showToast({ title: '错题已保存，下次优先复习', icon: 'success' });
-
-    // 可选：直接跳转到错题再练页面
-    // wx.navigateTo({
-    //   url: `/pages/review/single/index?libraryId=${libraryId}&onlyError=1`
-    // });
-  },
-
-  /**
    * 返回知识库详情页
    */
   goBack() {
-    wx.navigateBack();
+    const { libraryId } = this.data;
+    // wx.navigateTo({
+    //   url: `/pages/library/detail/index?libraryId=${libraryId}`
+    // });
+    wx.switchTab({
+      url: `/pages/library/index`
+    });
+
+    
   }
 });

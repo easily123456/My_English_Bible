@@ -66,11 +66,7 @@
   </view>
 
   <!-- 操作按钮 -->
-  <view class="btn-group" wx:if="{{errorCount > 0}}">
-    <button class="error-review-btn" bindtap="saveErrorItems">错题再练</button>
-    <button class="back-btn" bindtap="goBack">返回知识库</button>
-  </view>
-  <view class="btn-group" wx:else>
+  <view class="btn-group">
     <button class="back-btn" bindtap="goBack">返回知识库</button>
   </view>
 

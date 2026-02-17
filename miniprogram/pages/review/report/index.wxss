@@ -4,6 +4,8 @@
   padding: 20rpx;
   background-color: var(--color-bg-gray);
   min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* 报告概览 */
@@ -13,6 +15,8 @@
   border-radius: 15rpx;
   box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
   margin-bottom: 30rpx;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .overview-title {
@@ -70,6 +74,8 @@
   border-radius: 15rpx;
   box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
   margin-bottom: 30rpx;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .list-title {
@@ -160,22 +166,15 @@
   gap: 20rpx;
   justify-content: center;
   padding: 20rpx 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.error-review-btn {
-  flex: 1;
-  max-width: 200rpx;
-  height: 80rpx;
-  line-height: 80rpx;
-  background-color: var(--color-error);
-  color: var(--color-white);
-  border-radius: 12rpx;
-  font-size: 30rpx;
-}
+
 
 .back-btn {
   flex: 1;
-  max-width: 200rpx;
+  max-width: 250rpx;
   height: 80rpx;
   line-height: 80rpx;
   background-color: var(--color-primary-bg);
@@ -191,6 +190,9 @@
   align-items: center;
   gap: 20rpx;
   margin-top: 100rpx;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 20rpx;
 }
 
 .empty-tip text {

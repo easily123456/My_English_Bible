@@ -1,102 +1,140 @@
 /* pages/review/collection/index.wxss */
+/* 全局继承app.wxss主题色 */
 .container {
-  padding: 20rpx;
-  background-color: var(--color-bg-gray);
+  padding: 0;
   min-height: 100vh;
+  background-color: var(--color-bg-gray);
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/* 复习区域 */
+.review-card {
+  width: 100%;
+  min-height: 100vh;
+  padding: 15rpx 20rpx;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  gap: 15rpx;
 }
 
-.collection-card {
-  background-color: var(--color-white);
-  padding: 30rpx;
-  border-radius: 10rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
-  width: 90%;
-  max-width: 500rpx;
-}
-
-.question-title {
-  font-size: 28rpx;
-  color: var(--color-text-secondary);
-  margin-bottom: 10rpx;
+/* 题目区域 */
+.question {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--color-text-primary);
   text-align: center;
+  margin-bottom: 15rpx;
+  padding: 15rpx 0;
 }
 
-.question-content {
-  font-size: 36rpx;
+.zh-text {
   color: var(--color-primary);
   font-weight: bold;
-  margin-bottom: 30rpx;
-  line-height: 1.5;
-  text-align: center;
+  font-size: 32rpx;
 }
 
+/* 答题块 */
+.answer-block {
+  background-color: var(--color-white);
+  padding: 30rpx;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 10rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
+  margin: 0;
+}
+
+/* 中文内容 */
+.zh-content {
+  font-size: 28rpx;
+  color: var(--color-text-primary);
+  margin-bottom: 15rpx;
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+}
+
+/* 序列号样式 */
+.serial-number {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-right: 15rpx;
+  min-width: 40rpx;
+  text-align: right;
+}
+
+/* 英文内容 */
+.en-content {
+  font-size: 32rpx;
+  color: var(--color-primary);
+  font-weight: 600;
+  margin-top: 15rpx;
+  padding-top: 10rpx;
+  border-top: 1rpx dashed var(--color-border);
+}
+
+/* 默写输入框 */
 .answer-textarea {
   width: 100%;
-  min-height: 150rpx;
+  min-height: 120rpx;
   padding: 20rpx;
   border: 1rpx solid var(--color-border);
   border-radius: 10rpx;
   font-size: 28rpx;
-  margin-bottom: 30rpx;
+  margin-bottom: 10rpx;
   box-sizing: border-box;
+  line-height: 1.5;
 }
 
-.btn-group {
-  display: flex;
-  gap: 20rpx;
-  margin-bottom: 30rpx;
-  justify-content: center;
-}
-
-.btn {
-  flex: 1;
-  max-width: 200rpx;
-  height: 70rpx;
-  line-height: 70rpx;
-  background-color: var(--color-primary-bg);
-  color: var(--color-primary);
+/* 完成按钮 */
+.complete-btn {
+  width: 100%;
+  height: 80rpx;
+  line-height: 80rpx;
+  background-color: var(--color-primary);
+  color: var(--color-white);
   border-radius: 10rpx;
   font-size: 28rpx;
+  margin-top: 15rpx;
 }
 
-.result-wrap {
-  padding-top: 20rpx;
-  border-top: 1rpx dashed var(--color-border);
-  text-align: center;
-}
-
-.result {
-  font-size: 28rpx;
-  font-weight: bold;
-  margin-bottom: 10rpx;
-}
-
-.result.correct {
-  color: var(--color-success);
-}
-
-.result.error {
-  color: var(--color-error);
-}
-
-.correct-answer {
-  font-size: 26rpx;
-  color: var(--color-primary);
-}
-
-/* 空数据提示 */
-.empty-tip {
+/* 加载提示 */
+.loading-tip {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20rpx;
+  margin-top: 100rpx;
 }
 
-.empty-tip text {
+.loading-spinner {
+  width: 40rpx;
+  height: 40rpx;
+  border: 4rpx solid var(--color-primary-bg);
+  border-top: 4rpx solid var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 空数据/完成提示 */
+.empty-tip, .finish-tip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+  margin-top: 100rpx;
+}
+
+.empty-tip text, .finish-tip text {
   font-size: 28rpx;
   color: var(--color-text-secondary);
 }

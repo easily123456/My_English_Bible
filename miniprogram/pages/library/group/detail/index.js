@@ -6,6 +6,7 @@ Page({
     groupId: '',       // 小组ID
     groupName: '',     // 小组名称
     libraryId: '',     // 所属知识库ID
+    libraryIndex: -1,  // 知识库索引，用于判断跳转路径
     itemList: []       // 小组下的知识点列表
   },
 
@@ -13,8 +14,25 @@ Page({
   onLoad(options) {
     const { groupId, groupName, libraryId } = options
     this.setData({ groupId, groupName, libraryId })
+    // 获取知识库索引，用于判断跳转路径
+    this.getLibraryIndex(libraryId)
     // 查询小组下的所有知识点
     this.getGroupItems(groupId)
+  },
+  
+  // 获取知识库列表以确定当前知识库的索引
+  getLibraryIndex(libraryId) {
+    db.collection('libraries')
+      .get()
+      .then(res => {
+        const libraryList = res.data
+        const libraryIndex = libraryList.findIndex(item => item._id === libraryId)
+        this.setData({ libraryIndex })
+      })
+      .catch(err => {
+        console.error('获取知识库列表失败：', err)
+        this.setData({ libraryIndex: -1 })
+      })
   },
 
   // 下拉刷新重新加载
@@ -95,5 +113,25 @@ Page({
     wx.navigateTo({
       url: `/pages/knowledge/create/index?libraryId=${libraryId}&groupId=${groupId}&groupName=${groupName}`
     });
+  },
+  
+  // 开始复习按钮点击事件
+  startReview() {
+    const { libraryId, libraryIndex, groupId, groupName } = this.data;
+    
+    if (libraryIndex === 3 || libraryIndex === 4) {
+      // 第4-5个知识库的小组详情页跳转至collection
+      wx.navigateTo({
+        url: `/pages/review/collection/index?libraryId=${libraryId}&groupId=${groupId}&groupName=${groupName}&libraryIndex=${libraryIndex}`
+      });
+    } else if (libraryIndex === 5) {
+      // 第6个知识库的小组详情页跳转至confusion
+      wx.navigateTo({
+        url: `/pages/review/confusion/index?libraryId=${libraryId}&groupId=${groupId}&groupName=${groupName}&libraryIndex=${libraryIndex}`
+      });
+    } else {
+      // 其他情况默认返回上一页
+      wx.navigateBack();
+    }
   }
 })

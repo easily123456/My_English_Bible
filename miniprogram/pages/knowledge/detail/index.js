@@ -14,7 +14,7 @@ Page({
     const { knowledgeId, highlight } = options;
     
     this.setData({ isHighlight: highlight === '1' });
-    console.log("miniprogram\pages\knowledge\detail\index.js文件下15行：输出传入的isHighlight值 "+this.data.isHighlight);
+    // console.log("miniprogram\pages\knowledge\detail\index.js文件下15行：输出传入的isHighlight值 "+this.data.isHighlight);
     if (!knowledgeId) {
       wx.showToast({ title: '参数错误', icon: 'none' })
       setTimeout(() => wx.navigateBack(), 1500)

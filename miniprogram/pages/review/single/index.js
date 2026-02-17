@@ -22,6 +22,9 @@ Page({
     correctCount: 0,      // 正确题数
     correctItemIds: [],   // 正确题的itemId列表
     
+    // 进度条相关
+    progress: 0,          // 当前进度值（0到reviewList.length）
+    
     // 加载状态
     isLoading: true
   },
@@ -35,7 +38,9 @@ Page({
       // 初始化新增字段（避免undefined）
       userAnswerRecord: {},
       correctCount: 0,
-      correctItemIds: []
+      correctItemIds: [],
+      // 初始化进度条
+      progress: 0
     });
     wx.setNavigationBarTitle({ title: `${libraryName} - 单点复习` });
 
@@ -142,6 +147,8 @@ Page({
       // 6. 更新数据，加载第一个知识点
       this.setData({
         reviewList: shuffledList,
+        currentIndex: 0,
+        progress: 0,
         currentItem: shuffledList[0] || null,
         isLoading: false
       });
@@ -176,8 +183,14 @@ Page({
    * 核心操作：点击“默写已完成”
    */
   async completeReview() {
-    const { currentItem, userAnswer, reviewType } = this.data;
+    const { currentItem, userAnswer, reviewType, reviewList, currentIndex } = this.data;
     if (!currentItem || this.data.isSubmitting) return;
+
+    // 检查是否已完成所有复习
+    if (currentIndex >= reviewList.length) {
+      this.completeAllReview();
+      return;
+    }
 
     this.setData({ isSubmitting: true });
 
@@ -203,7 +216,12 @@ Page({
         });
       }
 
-      // 3. 判定结果处理
+      // 3. 更新进度条
+      const { progress } = this.data;
+      const newProgress = progress + 1;
+      this.setData({ progress: newProgress });
+      
+      // 4. 判定结果处理
       if (!isCorrect) {
         // 错误：跳转到知识点详情页（标红提示）
         wx.navigateTo({
@@ -219,7 +237,10 @@ Page({
       wx.showToast({ title: '提交失败', icon: 'none' });
       console.error('复习提交失败：', err);
     } finally {
-      this.setData({ isSubmitting: false });
+      // 延迟设置isSubmitting为false，防止连续点击
+      setTimeout(() => {
+        this.setData({ isSubmitting: false });
+      }, 300);
     }
   },
 
@@ -258,9 +279,10 @@ Page({
    * 自动下一题
    */
   nextItem() {
+    // console.log("miniprogram\pages\review\single\index.js文件下第261行输出：进入nextItem函数 ");
     const { reviewList, currentIndex } = this.data;
     const nextIndex = currentIndex + 1;
-
+    // console.log("miniprogram\pages\review\single\index.js文件下第263行输出：nextIndex "+nextIndex+" reviewList.length "+reviewList.length);
     if (nextIndex >= reviewList.length) {
       // 复习完成：跳转报告页
       this.completeAllReview();
@@ -288,6 +310,12 @@ Page({
       reviewType 
     } = this.data;
     
+    // 检查reviewList是否为空
+    if (!reviewList || reviewList.length === 0) {
+      wx.showToast({ title: '暂无复习内容', icon: 'none' });
+      return;
+    }
+    
     // 组装复习结果数据
     const reviewResult = {
       libraryId: libraryId,
@@ -314,9 +342,12 @@ Page({
    * 从详情页返回后自动下一题
    */
   onShow() {      //自动触发
+    
+    // console.log("miniprogram\pagess \review\single\index.js文件第346行输出：进入onShow函数");
     const { currentItem, reviewList, currentIndex } = this.data;
+    console.log("miniprogram\pagess \review\single\index.js文件第348行输出：progress/reviewList.length*100  "+ (reviewList.length > 0 ? this.data.progress/reviewList.length*100 : 0));
     // 若当前有知识点且用户从详情页返回（非初始加载）
-    if (currentItem && currentIndex < reviewList.length - 1) {
+    if (currentItem && currentIndex < reviewList.length) {
       this.nextItem();
     }
   },

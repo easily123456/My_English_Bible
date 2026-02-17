@@ -92,10 +92,10 @@ Page({
     const hasAnswer = Object.values(userAnswers).some(v => v);
     //Object.values(userAnswers)返回 userAnswers 对象的所有属性值组成的数组
     //.some(v => v)对数组执行遍历，检查是否存在至少一个元素满足条件，等价于 v => Boolean(v) === true
-    if (!hasAnswer) {
-      wx.showToast({ title: '请至少填写一个答案', icon: 'none' });
-      return;
-    }
+    // if (!hasAnswer) {
+    //   wx.showToast({ title: '请至少填写一个答案', icon: 'none' });
+    //   return;
+    // }
 
     this.setData({ isSubmitting: true });
 

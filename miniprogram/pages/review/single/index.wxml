@@ -2,13 +2,12 @@
 <view class="container">
   <!-- 复习进度 -->
   <view class="progress-bar" wx:if="{{reviewList.length > 0}}">
-    <text class="progress-text">{{currentIndex + 1}}/{{reviewList.length}}</text>
+    <text class="progress-text">{{progress}}/{{reviewList.length}}</text>
     <view class="progress-bg">
       <view 
         class="progress-fill" 
-        wx:style="'width: ' + (currentIndex + 1)/reviewList.length*100 + '%'"
+        style="width: {{(reviewList.length > 0 ? progress/reviewList.length*100 : 0) + '%' }}"
       ></view>
-
     </view>
   </view>
 
