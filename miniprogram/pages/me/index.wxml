@@ -6,15 +6,15 @@
     <!-- 统计项容器：预留3个统计项（知识点总数、今日复习、正确率） -->
     <view class="stats-item-container">
       <view class="stats-item">
-        <text class="stats-num">0</text>
+        <text class="stats-num">{{knowledgeCount}}</text>
         <text class="stats-desc">知识点总数</text>
       </view>
       <view class="stats-item">
-        <text class="stats-num">0</text>
+        <text class="stats-num">{{todayReviewCount}}</text>
         <text class="stats-desc">今日复习</text>
       </view>
       <view class="stats-item">
-        <text class="stats-num">0%</text>
+        <text class="stats-num">{{avgAccuracy}}</text>
         <text class="stats-desc">平均正确率</text>
       </view>
     </view>
@@ -29,7 +29,7 @@
       <text class="arrow">→</text>
     </view>
     <!-- 设置项占位2 -->
-    <view class="setting-item">
+    <view class="setting-item" bindtap="exportData">
       <text class="setting-item-text">数据导出</text>
       <text class="arrow">→</text>
     </view>
